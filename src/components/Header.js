@@ -20,9 +20,12 @@ const Header = () => {
         <Link to="" className="navbar--title">
           Rapid
         </Link>
+
         <div className="navbar--right">
           <div className="navbar--user">
-            <Avatar alt="A" src="/static/images/avatar/1.jpg" />
+            <Link to="account/profile">
+              <Avatar alt="A" src="/static/images/avatar/1.jpg" />
+            </Link>
           </div>
           <Button
             variant="contained"

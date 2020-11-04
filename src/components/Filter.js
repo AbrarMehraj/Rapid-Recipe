@@ -69,11 +69,7 @@ export default function Filter({ getType }) {
         </FormControl>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            //   onClick={onSubmit}
-          >
+          <Button variant="contained" color="primary" onClick={onSubmit}>
             Apply
           </Button>
         </div>

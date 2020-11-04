@@ -10,7 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { setUser } from "../actions";
-import { CenterFocusStrong } from "@material-ui/icons";
+import Spinner from "./Spinner";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,11 +27,12 @@ const SignUp = (props) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const signUp = (e) => {
     e.preventDefault();
-
+    setLoading(true);
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
@@ -40,12 +41,44 @@ const SignUp = (props) => {
         });
       })
       .then(() => history.push("/"))
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        setLoading(false);
+        setEmail("");
+        setUsername("");
+        setPassword("");
+        setErrorMessage("The Email Adrress is Already in use...");
+      });
   };
 
   const isDisabled = () => {
     if (username && email && password.length > 6) return false;
     return true;
+  };
+
+  const signupSuccess = () => {
+    if (loading) {
+      return (
+        <Button
+          style={{ alignSelf: "stretch", margin: "1rem 0" }}
+          variant="contained"
+          color="primary"
+        >
+          <Spinner />
+        </Button>
+      );
+    }
+
+    return (
+      <Button
+        style={{ alignSelf: "stretch", margin: "1rem 0" }}
+        variant="contained"
+        color="primary"
+        onClick={signUp}
+        disabled={isDisabled()}
+      >
+        Sign Up
+      </Button>
+    );
   };
 
   return (
@@ -98,15 +131,13 @@ const SignUp = (props) => {
                 // defaultValue="Hello World"
                 // helperText="Incorrect entry."
               />
-              <Button
-                style={{ alignSelf: "stretch", margin: "1rem 0" }}
-                variant="contained"
-                color="primary"
-                onClick={signUp}
-                disabled={isDisabled()}
-              >
-                Sign up
-              </Button>
+
+              {/* showing and  error if there is  */}
+              {errorMessage ? (
+                <p style={{ color: "red" }}>{errorMessage}</p>
+              ) : null}
+
+              {signupSuccess()}
             </div>
           </form>
           <center>OR</center>
@@ -120,7 +151,7 @@ const SignUp = (props) => {
                 color: "blue",
               }}
             >
-              Log in
+              Sign In
             </Link>
           </div>
         </div>

@@ -29,6 +29,7 @@ const SignIn = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [emailBool, setEmailBool] = useState(false);
   const [passwordBool, setPasswordBool] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const change = (e) => {
     if (e.target.name === "email") {
@@ -72,6 +73,7 @@ const SignIn = (props) => {
   };
 
   const logIn = (e) => {
+    setLoading(true);
     const isValidate = validate();
     console.log(isValidate);
     if (isValidate) {
@@ -79,13 +81,53 @@ const SignIn = (props) => {
         .signInWithEmailAndPassword(email, password)
         .then(() => {
           console.log("spinner");
-          return <Spinner />;
+          // return <Spinner />;
         })
-        .catch((error) => setErrorMessage(error.message));
+        .catch((error) => {
+          setLoading(false);
+          setErrorMessage(error.message);
+        });
 
       e.preventDefault();
       console.log(errorMessage);
     }
+  };
+
+  const loginSuccess = () => {
+    if (loading) {
+      return (
+        <Button
+          style={{ alignSelf: "stretch", margin: "1rem 0" }}
+          variant="contained"
+          color="primary"
+        >
+          <Spinner />
+        </Button>
+      );
+    }
+
+    return (
+      <div>
+        <Button
+          // style={{ alignSelf: "stretch", margin: "1rem 0" }}
+          variant="contained"
+          color="primary"
+          onClick={logIn}
+          disabled={isDisabled()}
+        >
+          Sign In
+        </Button>
+        <Button
+          // style={{ alignSelf: "stretch", margin: "1rem 0" }}
+          variant="contained"
+          color="primary"
+          onClick={logIn}
+          disabled={isDisabled()}
+        >
+          SignUp
+        </Button>
+      </div>
+    );
   };
 
   return (
@@ -93,7 +135,6 @@ const SignIn = (props) => {
       <div className="signin">
         <div className="signin--form">
           <div className="title">Rapid</div>
-          <center>{errorMessage}</center>
           <form className={classes.root} validate="true" autoComplete="off">
             <div
               style={{
@@ -129,15 +170,12 @@ const SignIn = (props) => {
                 required
                 helperText={passwordError}
               />
-              <Button
-                style={{ alignSelf: "stretch", margin: "1rem 0" }}
-                variant="contained"
-                color="primary"
-                onClick={logIn}
-                disabled={isDisabled()}
-              >
-                Log In
-              </Button>
+              {/* showing and  error if there is  */}
+              {errorMessage ? (
+                <p style={{ color: "red" }}>{errorMessage}</p>
+              ) : null}
+
+              {loginSuccess()}
             </div>
           </form>
           <center>OR</center>

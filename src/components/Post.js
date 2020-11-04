@@ -88,6 +88,8 @@ const Post = (props) => {
   // console.log(timeS);
 
   const [likes, setLikes] = useState([]);
+  const [getComments, setGetComments] = useState([]);
+  const [comment, setComment] = useState("");
 
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
@@ -115,8 +117,21 @@ const Post = (props) => {
         });
     }
 
+    let commentsUnsubscribe;
+    if (id) {
+      commentsUnsubscribe = db
+        .collection("posts")
+        .doc(id)
+        .collection("comments")
+        .orderBy("timestamp", "desc")
+        .onSnapshot((snapshot) => {
+          setGetComments(snapshot.docs.map((doc) => doc.data()));
+        });
+    }
+
     return () => {
       likesUnsubscribe();
+      commentsUnsubscribe();
     };
   }, [id]);
 
@@ -171,14 +186,33 @@ const Post = (props) => {
         type="text"
         placeholder="Comment"
         style={{ flex: "1", marginRight: "5px" }}
+        onChange={(e) => setComment(e.target.value)}
       />
-      <Button variant="contained" color="primary">
+      <Button
+        variant="contained"
+        color="primary"
+        type="submit"
+        onClick={(e) => postComment(e)}
+        disabled={!comment}
+      >
         Post
       </Button>
     </form>
   );
 
   // Functionality
+  const postComment = (e) => {
+    e.preventDefault();
+
+    db.collection("posts").doc(id).collection("comments").add({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      text: comment,
+      username: user.displayName,
+    });
+
+    setComment("");
+  };
+
   const onLike = () => {
     db.collection("posts").doc(id).collection("likes").add({
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -250,13 +284,21 @@ const Post = (props) => {
         </Typography>
       </CardContent>
       <Divider />
+      <div style={{ margin: "10px 0", marginLeft: "4px" }}>
+        <strong>{getComments[0]?.username} </strong>
+        {getComments[0]?.text}
+      </div>
+
+      {/* Form Comment */}
       {form}
 
       <Grid container justify="space-between">
         <Grid item>
           <IconButton aria-label="add to favorites">
             {renderLikeButton()}
-            <p style={{ fontSize: "1rem" }}>{likes.length}</p>
+            <p style={{ fontSize: "1rem", marginBottom: "4px" }}>
+              {likes.length}
+            </p>
           </IconButton>
         </Grid>
         <Grid item>
