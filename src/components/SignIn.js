@@ -107,26 +107,15 @@ const SignIn = (props) => {
     }
 
     return (
-      <div>
-        <Button
-          // style={{ alignSelf: "stretch", margin: "1rem 0" }}
-          variant="contained"
-          color="primary"
-          onClick={logIn}
-          disabled={isDisabled()}
-        >
-          Sign In
-        </Button>
-        <Button
-          // style={{ alignSelf: "stretch", margin: "1rem 0" }}
-          variant="contained"
-          color="primary"
-          onClick={logIn}
-          disabled={isDisabled()}
-        >
-          SignUp
-        </Button>
-      </div>
+      <Button
+        style={{ alignSelf: "stretch", margin: "1rem 0" }}
+        variant="contained"
+        color="primary"
+        onClick={logIn}
+        disabled={isDisabled()}
+      >
+        Sign In
+      </Button>
     );
   };
 
