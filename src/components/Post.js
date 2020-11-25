@@ -9,20 +9,19 @@ import { db } from './firebase';
 import firebase from 'firebase';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { CardMedia } from '@material-ui/core';
+import moment from 'moment';
 
 const Post = ({ post, id }) => {
   const history = useHistory();
-  // const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.userInfo);
-  // const commentList = useSelector((state) => state.commentList);
 
   const [likes, setLikes] = useState([]);
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState('');
   const found = likes.find((el) => el.uuid === userInfo?.uid);
 
-  // console.log(likes);
-
+  console.log(comments);
   useEffect(() => {
     let likesUnsubscribe;
     if (id) {
@@ -56,29 +55,13 @@ const Post = ({ post, id }) => {
 
   const commentHandler = (e) => {
     e.preventDefault();
+    db.collection('posts').doc(id).collection('comments').add({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      text: commentInput,
+      username: userInfo.displayName,
+    });
+    setCommentInput('');
   };
-
-  //   // const onLike = () => {
-  //   //   db.collection('posts').doc(id).collection('likes').add({
-  //   //     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-  //   //     uuid: user.uid,
-  //   //   });
-  //   // };
-
-  //   // const onUnLike = () => {
-  //   //   const found = likes.find((like) => like.uuid === user.uid);
-  //   //   if (found?.uuid) {
-  //   //     db.collection('posts')
-  //   //       .doc(id)
-  //   //       .collection('likes')
-  //   //       .where('uuid', '==', user.uid)
-  //   //       .get()
-  //   //       .then((querySnapshot) => {
-  //   //         querySnapshot.docs.map((doc) => {
-  //   //           return doc.ref.delete();
-  //   //         });
-  //   //       });
-  //   //   }
 
   const onLike = () => {
     console.log('OnLike');
@@ -126,11 +109,32 @@ const Post = ({ post, id }) => {
     }
   };
 
+  const onShare = () => {
+    // const title = title;
+    const url = `${window.document.location.href}post/${id}`;
+    if (navigator.share) {
+      navigator
+        .share({
+          // title: title,
+          url: url,
+        })
+        .then(() => {
+          console.log('Thanks for sharing!');
+        })
+        .catch(console.error);
+    } else {
+      // console.log("title");
+    }
+  };
+
   return (
     <>
       <Card className='rounded my-3' text='white'>
         <Card.Header className='py-3' as='h4'>
-          Post by {post.username}
+          <Card.Title>Post by {post.username}</Card.Title>
+          <Card.Subtitle>
+            {moment.unix(post.timestamp.seconds).format('MMMM Do YYYY, h:mma')}
+          </Card.Subtitle>
         </Card.Header>
         <LinkContainer to={`/post/${id}`}>
           <Card.Img variant='top' src={post.imageUrl} className='px-1 ' />
@@ -145,8 +149,17 @@ const Post = ({ post, id }) => {
 
         <ListGroup variant='flush'>
           <ListGroup.Item>
-            <strong className='mr-2'>{comments[0]?.username} </strong>
+            <strong className='mr-2'>
+              {comments[0]?.username}
+              <i className='fas fa-arrow-right mx-2'></i>
+            </strong>
             {comments[0]?.text}
+
+            <Card.Subtitle className='mt-3'>
+              {moment
+                .unix(comments[0]?.timestamp?.seconds)
+                .format('MMMM Do YYYY, h:mma')}
+            </Card.Subtitle>
           </ListGroup.Item>
 
           <ListGroup.Item className='mb-n2'>
@@ -162,7 +175,12 @@ const Post = ({ post, id }) => {
                     value={commentInput}
                     onChange={(e) => setCommentInput(e.target.value)}
                   />
-                  <Button type='submit' variant='dark' className='ml-2 rounded'>
+                  <Button
+                    type='submit'
+                    variant='dark'
+                    className='ml-2 rounded'
+                    disabled={!commentInput}
+                  >
                     Post
                   </Button>
                 </Form.Group>
@@ -175,8 +193,12 @@ const Post = ({ post, id }) => {
           <Col className='p-2 '>
             {renderLikeButton()} <span>{likes?.length}</span>
           </Col>
-          <Col className='p-2'>Comment</Col>
-          <Col className='p-2'>Share</Col>
+          <Col className='p-2'>
+            <Link to={`/post/${id}`}>comments</Link>
+          </Col>
+          <Col className='p-2' onClick={onShare}>
+            Share
+          </Col>
         </Row>
       </Card>
     </>
