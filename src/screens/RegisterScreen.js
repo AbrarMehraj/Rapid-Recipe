@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 import { Link } from 'react-router-dom';
 import Message from '../components/Message';
 import { auth } from '../components/firebase';
 
-const LoginScreen = ({ location, history }) => {
+const RegisterScreen = ({ history }) => {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const userInfo = useSelector((state) => state.userInfo);
 
@@ -20,27 +23,49 @@ const LoginScreen = ({ location, history }) => {
     }
   }, [userInfo, history]);
 
-  const loginHandler = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
 
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then(() => history.push('/'))
-      .catch((error) => {
-        setLoading(false);
-        setError(error.message);
-      });
-
-    e.preventDefault();
+    if (password === confirmPassword) {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then((authUser) => {
+          return authUser.user.updateProfile({
+            displayName: username,
+          });
+        })
+        .then(() => history.push('/'))
+        .catch((error) => {
+          setError(error);
+          setLoading(false);
+        });
+    } else {
+      setMessage(`Password Doesn't Match`);
+      setPassword('');
+      setConfirmPassword('');
+      setLoading(false);
+    }
   };
 
   return (
     <FormContainer>
-      <h1 className='mb-3 text-center'>Sign In</h1>
-      {error && <Message variant='info'>{error}</Message>}
-      <Form onSubmit={loginHandler}>
+      <h1 className='text-center mb-2'>Sign Up</h1>
+      {error && <Message variant='danger'>{error}</Message>}
+      {message ? <Message variant='danger'>{message}</Message> : null}
+
+      <Form onSubmit={submitHandler}>
+        <Form.Group controlId='username'>
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type='username'
+            placeholder='Username'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          ></Form.Control>
+        </Form.Group>
+
         <Form.Group controlId='email'>
           <Form.Label>Email Address</Form.Label>
           <Form.Control
@@ -56,12 +81,24 @@ const LoginScreen = ({ location, history }) => {
           <Form.Label>Password</Form.Label>
           <Form.Control
             type='password'
-            placeholder='Password'
+            placeholder='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           ></Form.Control>
         </Form.Group>
+
+        <Form.Group controlId='confirmPassword'>
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Confirm Password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          ></Form.Control>
+        </Form.Group>
+
         {loading ? (
           <Button variant='dark' disabled>
             <Spinner
@@ -72,21 +109,21 @@ const LoginScreen = ({ location, history }) => {
               aria-hidden='true'
               className='mr-2'
             />
-            Signing In...
+            Registering...
           </Button>
         ) : (
           <Button type='submit' variant='dark' className='rounded'>
-            Sign In
+            Register
           </Button>
         )}
       </Form>
 
       <Row className='py-3 mt-3 float-right'>
         <Col>
-          Don't have an Account?
-          <Link to='/register'>
+          Have an Account?
+          <Link to={'/login'}>
             <Button type='submit' variant='dark' className='rounded ml-3'>
-              Register
+              Login
             </Button>
           </Link>
         </Col>
@@ -95,4 +132,4 @@ const LoginScreen = ({ location, history }) => {
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;

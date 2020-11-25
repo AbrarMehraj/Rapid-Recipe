@@ -1,22 +1,17 @@
 /** @format */
 
-export const setPosts = (posts) => {
+import { GET_POST_LIST, SET_USER } from '../types/Types';
+
+export const getPostList = (posts) => {
   return {
-    type: "POSTS",
-    posts,
+    type: GET_POST_LIST,
+    payload: posts,
   };
 };
 
-// export const postComments = (comments) => {
-//   return {
-//     type: "COMMENTS",
-//     comments,
-//   };
-// };
-
 export const setUser = (user) => {
   return {
-    type: "SET__USER",
-    user,
+    type: SET_USER,
+    payload: user,
   };
 };

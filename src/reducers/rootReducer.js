@@ -1,27 +1,20 @@
-/** @format */
+import { GET_POST_LIST, SET_USER } from '../types/Types';
 
-export const posts = (state = [], action) => {
+export const postListReducer = (state = {}, action) => {
   switch (action.type) {
-    case "POSTS":
-      return action.posts;
+    case GET_POST_LIST:
+      return { posts: action.payload };
+
     default:
       return state;
   }
 };
 
-// export const postComments = (state = [], action) => {
-//   switch (action.type) {
-//     case "COMMENTS":
-//       return action.comments;
-//     default:
-//       return state;
-//   }
-// };
-
-export const User = (state = {}, action) => {
+export const userDetailsReducer = (state = {}, action) => {
   switch (action.type) {
-    case "SET__USER":
-      return action.user;
+    case SET_USER:
+      return action.payload;
+
     default:
       return state;
   }

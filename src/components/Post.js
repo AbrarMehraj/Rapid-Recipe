@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
-import { Button, Divider, Grid } from "@material-ui/core";
-import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import { DeleteOutline } from "@material-ui/icons";
-import Modal from "@material-ui/core/Modal";
-import { connect } from "react-redux";
-import firebase from "firebase";
-import { db } from "./firebase";
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import { red } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import { Button, Divider, Grid } from '@material-ui/core';
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { DeleteOutline } from '@material-ui/icons';
+import Modal from '@material-ui/core/Modal';
+import { connect } from 'react-redux';
+import firebase from 'firebase';
+import { db } from './firebase';
 
 function getModalStyle() {
   const top = 50;
@@ -34,29 +34,30 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   root: {
     // maxWidth: 345,
+    marginBottom: 15,
   },
   media: {
     height: 0,
-    paddingTop: "56.25%", // 16:9
+    paddingTop: '56.25%', // 16:9
   },
   expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
     }),
   },
   expandOpen: {
-    transform: "rotate(180deg)",
+    transform: 'rotate(180deg)',
   },
   avatar: {
     backgroundColor: red[500],
   },
   paper: {
-    position: "absolute",
+    position: 'absolute',
     minWidth: 320,
     backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
+    border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -79,13 +80,9 @@ const Post = (props) => {
     // timestamp
   } = post;
 
-  // console.log(timestamp);
-  // const timeS = new Date(timestamp.seconds);
-  // console.log(timeS);
-
   const [likes, setLikes] = useState([]);
   const [getComments, setGetComments] = useState([]);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
@@ -100,179 +97,173 @@ const Post = (props) => {
   };
 
   // UseEffect
-  useEffect(() => {
-    let likesUnsubscribe;
-    if (id) {
-      likesUnsubscribe = db
-        .collection("posts")
-        .doc(id)
-        .collection("likes")
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) => {
-          setLikes(snapshot.docs.map((doc) => doc.data()));
-        });
-    }
+  // useEffect(() => {
+  //   let likesUnsubscribe;
+  //   if (id) {
+  //     likesUnsubscribe = db
+  //       .collection('posts')
+  //       .doc(id)
+  //       .collection('likes')
+  //       .orderBy('timestamp', 'desc')
+  //       .onSnapshot((snapshot) => {
+  //         setLikes(snapshot.docs.map((doc) => doc.data()));
+  //       });
+  //   }
 
-    let commentsUnsubscribe;
-    if (id) {
-      commentsUnsubscribe = db
-        .collection("posts")
-        .doc(id)
-        .collection("comments")
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) => {
-          setGetComments(snapshot.docs.map((doc) => doc.data()));
-        });
-    }
+  //   let commentsUnsubscribe;
+  //   if (id) {
+  //     commentsUnsubscribe = db
+  //       .collection('posts')
+  //       .doc(id)
+  //       .collection('comments')
+  //       .orderBy('timestamp', 'desc')
+  //       .onSnapshot((snapshot) => {
+  //         setGetComments(snapshot.docs.map((doc) => doc.data()));
+  //       });
+  //   }
 
-    return () => {
-      likesUnsubscribe();
-      commentsUnsubscribe();
-    };
-  }, [id]);
+  //   return () => {
+  //     likesUnsubscribe();
+  //     commentsUnsubscribe();
+  //   };
+  // }, [id]);
 
   // Render html
-  const deleteModalBody = (
-    <div style={modalStyle} className={classes.paper}>
-      <h5 id="simple-modal-title">Are you sure You wanna delete this Post ?</h5>
-      <Divider />
-      <div style={{ float: "right", marginTop: "1rem" }}>
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ marginRight: "10px" }}
-          onClick={() => handleClose()}
-        >
-          No
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            alert("Post Deleted Successfully");
-            handleClose();
-          }}
-        >
-          yes
-        </Button>
-      </div>
-    </div>
-  );
+  // const deleteModalBody = (
+  //   <div style={modalStyle} className={classes.paper}>
+  //     <h5 id='simple-modal-title'>Are you sure You wanna delete this Post ?</h5>
+  //     <Divider />
+  //     <div style={{ float: 'right', marginTop: '1rem' }}>
+  //       <Button
+  //         variant='contained'
+  //         color='primary'
+  //         style={{ marginRight: '10px' }}
+  //         onClick={() => handleClose()}
+  //       >
+  //         No
+  //       </Button>
+  //       <Button
+  //         variant='contained'
+  //         color='secondary'
+  //         onClick={() => {
+  //           alert('Post Deleted Successfully');
+  //           handleClose();
+  //         }}
+  //       >
+  //         yes
+  //       </Button>
+  //     </div>
+  //   </div>
+  // );
 
   //  Render Like Button On Condition
-  const renderLikeButton = () => {
-    const found = likes.find((el) => el.uuid === user.uid);
-    if (user.uid === found?.uuid)
-      return (
-        <div onClick={onUnLike}>
-          <FavoriteIcon />
-        </div>
-      );
-    return (
-      <div onClick={onLike}>
-        <FavoriteBorderIcon />
-      </div>
-    );
-  };
+  // const renderLikeButton = () => {
+  //   const found = likes.find((el) => el.uuid === user.uid);
+  //   if (user.uid === found?.uuid)
+  //     return (
+  //       <div onClick={onUnLike}>
+  //         <FavoriteIcon />
+  //       </div>
+  //     );
+  //   return (
+  //     <div onClick={onLike}>
+  //       <FavoriteBorderIcon />
+  //     </div>
+  //   );
+  // };
 
-  // comment Form
-  const form = (
-    <form style={{ display: "flex", padding: "0 3px" }}>
-      <input
-        type="text"
-        placeholder="Comment"
-        style={{ flex: "1", marginRight: "5px" }}
-        onChange={(e) => setComment(e.target.value)}
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        onClick={(e) => postComment(e)}
-        disabled={!comment}
-      >
-        Post
-      </Button>
-    </form>
-  );
+  // // comment Form
+  // const form = (
+  //   <form style={{ display: 'flex', padding: '0 3px' }}>
+  //     <input
+  //       type='text'
+  //       placeholder='Comment'
+  //       style={{ flex: '1', marginRight: '5px' }}
+  //       onChange={(e) => setComment(e.target.value)}
+  //     />
+  //     <Button
+  //       variant='contained'
+  //       color='primary'
+  //       type='submit'
+  //       onClick={(e) => postComment(e)}
+  //       disabled={!comment}
+  //     >
+  //       Post
+  //     </Button>
+  //   </form>
+  // );
 
   // ############## Functionality  ###############
-  const deleteRenderCondition = () => {
-    if (userId === user.uid) {
-      return (
-        <div>
-          <div onClick={handleOpen}>
-            <DeleteOutline />
-          </div>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-          >
-            {deleteModalBody}
-          </Modal>
-        </div>
-      );
-    }
-  };
+  // const deleteRenderCondition = () => {
+  //   if (userId === user.uid) {
+  //     return (
+  //       <div>
+  //         <div onClick={handleOpen}>
+  //           <DeleteOutline />
+  //         </div>
+  //         <Modal
+  //           open={open}
+  //           onClose={handleClose}
+  //           aria-labelledby='simple-modal-title'
+  //           aria-describedby='simple-modal-description'
+  //         >
+  //           {deleteModalBody}
+  //         </Modal>
+  //       </div>
+  //     );
+  //   }
+  // };
 
-  const postComment = (e) => {
-    e.preventDefault();
+  // const postComment = (e) => {
+  //   e.preventDefault();
 
-    db.collection("posts").doc(id).collection("comments").add({
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      text: comment,
-      username: user.displayName,
-    });
+  //   db.collection('posts').doc(id).collection('comments').add({
+  //     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+  //     text: comment,
+  //     username: user.displayName,
+  //   });
 
-    setComment("");
-  };
+  //   setComment('');
+  // };
 
-  const onLike = () => {
-    db.collection("posts").doc(id).collection("likes").add({
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      uuid: user.uid,
-    });
-  };
+  // const onLike = () => {
+  //   db.collection('posts').doc(id).collection('likes').add({
+  //     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+  //     uuid: user.uid,
+  //   });
+  // };
 
-  const onUnLike = () => {
-    const found = likes.find((like) => like.uuid === user.uid);
-    if (found?.uuid) {
-      db.collection("posts")
-        .doc(id)
-        .collection("likes")
-        .where("uuid", "==", user.uid)
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.docs.map((doc) => {
-            return doc.ref.delete();
-          });
-        });
-    }
-  };
+  // const onUnLike = () => {
+  //   const found = likes.find((like) => like.uuid === user.uid);
+  //   if (found?.uuid) {
+  //     db.collection('posts')
+  //       .doc(id)
+  //       .collection('likes')
+  //       .where('uuid', '==', user.uid)
+  //       .get()
+  //       .then((querySnapshot) => {
+  //         querySnapshot.docs.map((doc) => {
+  //           return doc.ref.delete();
+  //         });
+  //       });
+  //   }
+  // };
 
   return (
-    <Card
-    // className={classes.root}
-    >
+    <Card className={classes.root}>
       <CardHeader
         avatar={
           <Avatar
-            aria-label="recipe"
+            aria-label='recipe'
             className={classes.avatar}
             // Change src later
-            src="dff"
+            src='dff'
             alt={username}
           />
         }
-        action={
-          <IconButton aria-label="settings">
-            {deleteRenderCondition()}
-          </IconButton>
-        }
+        action={<IconButton aria-label='settings'></IconButton>}
         title={username}
-        subheader="Sep 20 2020"
+        subheader='Sep 20 2020'
       />
 
       <Divider />
@@ -280,40 +271,40 @@ const Post = (props) => {
       <CardMedia
         className={classes.media}
         image={imageUrl}
-        title="failed to load"
+        title='failed to load'
       />
       <Divider />
 
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography variant='body2' color='textSecondary' component='p'>
           <strong>Title:</strong> {title}
         </Typography>
       </CardContent>
       <Divider />
-      <div style={{ margin: "10px 0", marginLeft: "4px" }}>
+      <div style={{ margin: '10px 0', marginLeft: '4px' }}>
         <strong>{getComments[0]?.username} </strong>
         {getComments[0]?.text}
       </div>
 
       {/* Form Comment */}
-      {form}
+      {/* {form} */}
 
-      <Grid container justify="space-between">
+      <Grid container justify='space-between'>
         <Grid item>
-          <IconButton aria-label="add to favorites">
-            {renderLikeButton()}
-            <p style={{ fontSize: "1rem", marginBottom: "4px" }}>
+          <IconButton aria-label='add to favorites'>
+            {/* {renderLikeButton()} */}
+            <p style={{ fontSize: '1rem', marginBottom: '4px' }}>
               {likes.length}
             </p>
           </IconButton>
         </Grid>
         <Grid item>
-          <IconButton aria-label="add to comments">
+          <IconButton aria-label='add to comments'>
             <ChatBubbleIcon />
           </IconButton>
         </Grid>
         <Grid item>
-          <IconButton aria-label="share">
+          <IconButton aria-label='share'>
             <ShareIcon />
           </IconButton>
         </Grid>
@@ -322,10 +313,4 @@ const Post = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    user: state.User,
-  };
-};
-
-export default connect(mapStateToProps)(Post);
+export default Post;

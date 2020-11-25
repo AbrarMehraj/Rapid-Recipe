@@ -1,21 +1,30 @@
+/** @format */
+
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import './App.css';
-import Home from './components/Home';
-import SignUp from './components/SignUp';
-const App = () => {
+import './bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container } from 'react-bootstrap';
+import Footer from './components/Footer';
+import HomeScreen from './screens/HomeScreen';
+import Header from './components/Header';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+
+function App() {
   return (
-    <div>
-      <Router>
-        <Route path='/' exact component={Home} />
-        <Route path='/account/profile' exact>
-          <center>Profile</center>
-        </Route>
-        p
-        <Route path='/signup' exact component={SignUp} />
-      </Router>
-    </div>
+    <Router>
+      <Header />
+      <main className='py-3'>
+        <Container>
+          <Route path='/' exact component={HomeScreen} />
+          <Route path='/login' exact component={LoginScreen} />
+          <Route path='/register' exact component={RegisterScreen} />
+        </Container>
+      </main>
+      {/* <Footer /> */}
+    </Router>
   );
-};
+}
 
 export default App;
