@@ -5,7 +5,7 @@ import { db } from '../components/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPostList } from '../actions';
 import Loader from '../components/Loader';
-import Slider from '../components/Slider';
+// import Slider from '../components/Slider';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();

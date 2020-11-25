@@ -41,7 +41,7 @@ const Header = () => {
           <Navbar.Collapse id='navbar-nav'>
             <Nav className='ml-auto'>
               {userInfo ? (
-                <NavDropdown title={userInfo.displayName} id='username'>
+                <NavDropdown title={userInfo.displayName || ''} id='username'>
                   <LinkContainer to='/profile'>
                     <NavDropdown.Item className='light p-3'>
                       Profile
@@ -57,7 +57,7 @@ const Header = () => {
               ) : (
                 <LinkContainer to='/login'>
                   <Nav.Link>
-                    <i className='fas fa-user '></i> Sign In
+                    <i className='fas fa-user mr-2'></i> Sign In
                   </Nav.Link>
                 </LinkContainer>
               )}

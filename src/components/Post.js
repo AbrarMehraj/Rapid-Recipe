@@ -1,29 +1,129 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { Button, Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+// eslint-disable-next-line no-unused-vars
+import { useDispatch, useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { db } from './firebase';
+import firebase from 'firebase';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 const Post = ({ post, id }) => {
+  const history = useHistory();
+  // const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.userInfo);
-  const [commentInput, setCommentInput] = React.useState('');
+  // const commentList = useSelector((state) => state.commentList);
 
-  // useEffect(() => {
+  const [likes, setLikes] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [commentInput, setCommentInput] = useState('');
+  const found = likes.find((el) => el.uuid === userInfo?.uid);
 
-  //   db.collection('posts')
-  //           .doc(id)
-  //           .collection('comments')
-  //           .orderBy('timestamp', 'desc')
-  //           .onSnapshot((snapshot) => {
-  //             setGetComments(snapshot.docs.map((doc) => doc.data()));
-  //           });
-  //       }
+  // console.log(likes);
 
-  // },[]);
+  useEffect(() => {
+    let likesUnsubscribe;
+    if (id) {
+      likesUnsubscribe = db
+        .collection('posts')
+        .doc(id)
+        .collection('likes')
+        .orderBy('timestamp', 'desc')
+        .onSnapshot((snapshot) => {
+          setLikes(snapshot.docs.map((doc) => doc.data()));
+        });
+    }
+
+    let commentsUnsubscribe;
+    if (id) {
+      commentsUnsubscribe = db
+        .collection('posts')
+        .doc(id)
+        .collection('comments')
+        .orderBy('timestamp', 'desc')
+        .onSnapshot((snapshot) => {
+          setComments(snapshot.docs.map((doc) => doc.data()));
+        });
+    }
+
+    return () => {
+      likesUnsubscribe();
+      commentsUnsubscribe();
+    };
+  }, [id]);
 
   const commentHandler = (e) => {
     e.preventDefault();
+  };
+
+  //   // const onLike = () => {
+  //   //   db.collection('posts').doc(id).collection('likes').add({
+  //   //     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+  //   //     uuid: user.uid,
+  //   //   });
+  //   // };
+
+  //   // const onUnLike = () => {
+  //   //   const found = likes.find((like) => like.uuid === user.uid);
+  //   //   if (found?.uuid) {
+  //   //     db.collection('posts')
+  //   //       .doc(id)
+  //   //       .collection('likes')
+  //   //       .where('uuid', '==', user.uid)
+  //   //       .get()
+  //   //       .then((querySnapshot) => {
+  //   //         querySnapshot.docs.map((doc) => {
+  //   //           return doc.ref.delete();
+  //   //         });
+  //   //       });
+  //   //   }
+
+  const onLike = () => {
+    console.log('OnLike');
+    db.collection('posts').doc(id).collection('likes').add({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      uuid: userInfo.uid,
+    });
+  };
+
+  const onUnLike = () => {
+    console.log('OnUnLike');
+    if (found?.uuid) {
+      db.collection('posts')
+        .doc(id)
+        .collection('likes')
+        .where('uuid', '==', userInfo.uid)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.docs.map((doc) => {
+            return doc.ref.delete();
+          });
+        });
+    }
+  };
+
+  const renderLikeButton = () => {
+    if (!userInfo) {
+      return (
+        <span onClick={() => history.push('/login')}>
+          <FavoriteBorderIcon />
+        </span>
+      );
+    } else if (userInfo?.uid === found?.uuid) {
+      return (
+        <span onClick={onUnLike}>
+          <FavoriteIcon />
+        </span>
+      );
+    } else {
+      return (
+        <span onClick={onLike}>
+          <FavoriteBorderIcon />
+        </span>
+      );
+    }
   };
 
   return (
@@ -44,9 +144,13 @@ const Post = ({ post, id }) => {
         </Card.Body>
 
         <ListGroup variant='flush'>
-          <ListGroup.Item>comment</ListGroup.Item>
+          <ListGroup.Item>
+            <strong className='mr-2'>{comments[0]?.username} </strong>
+            {comments[0]?.text}
+          </ListGroup.Item>
+
           <ListGroup.Item className='mb-n2'>
-            {!userInfo ? (
+            {userInfo ? (
               <Form onSubmit={commentHandler}>
                 <Form.Group
                   controlId='formBasicEmail'
@@ -68,7 +172,9 @@ const Post = ({ post, id }) => {
         </ListGroup>
 
         <Row className='p-2 text-center'>
-          <Col className='p-2'>Like</Col>
+          <Col className='p-2 '>
+            {renderLikeButton()} <span>{likes?.length}</span>
+          </Col>
           <Col className='p-2'>Comment</Col>
           <Col className='p-2'>Share</Col>
         </Row>
@@ -150,7 +256,7 @@ export default Post;
 // const Post = (props) => {
 //   const classes = useStyles();
 
-//   // destructure
+//  destructure
 //   const { id, post, user } = props;
 //   const {
 //     title,
