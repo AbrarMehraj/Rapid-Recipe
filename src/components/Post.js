@@ -1,20 +1,30 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  ListGroup,
-  Row,
-} from 'react-bootstrap';
+import { useEffect } from 'react';
+import { Button, Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Post = ({ post, id }) => {
-  console.log(id, post);
   const userInfo = useSelector((state) => state.userInfo);
+  const [commentInput, setCommentInput] = React.useState('');
+
+  // useEffect(() => {
+
+  //   db.collection('posts')
+  //           .doc(id)
+  //           .collection('comments')
+  //           .orderBy('timestamp', 'desc')
+  //           .onSnapshot((snapshot) => {
+  //             setGetComments(snapshot.docs.map((doc) => doc.data()));
+  //           });
+  //       }
+
+  // },[]);
+
+  const commentHandler = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <>
@@ -35,22 +45,25 @@ const Post = ({ post, id }) => {
 
         <ListGroup variant='flush'>
           <ListGroup.Item>comment</ListGroup.Item>
-          <ListGroup.Item>
+          <ListGroup.Item className='mb-n2'>
             {!userInfo ? (
-              <Form>
+              <Form onSubmit={commentHandler}>
                 <Form.Group
                   controlId='formBasicEmail'
                   style={{ display: 'flex' }}
                 >
-                  <Form.Control type='text' placeholder='Enter Comment' />
+                  <Form.Control
+                    type='text'
+                    placeholder='Enter Comment'
+                    value={commentInput}
+                    onChange={(e) => setCommentInput(e.target.value)}
+                  />
                   <Button type='submit' variant='dark' className='ml-2 rounded'>
                     Post
                   </Button>
                 </Form.Group>
               </Form>
-            ) : (
-              <div>No user</div>
-            )}
+            ) : null}
           </ListGroup.Item>
         </ListGroup>
 
