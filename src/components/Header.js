@@ -17,9 +17,15 @@ const Header = () => {
         <strong>Under Development</strong>
       </center>
       <nav className="navbar">
-        <Link to="" className="navbar--title">
-          Rapid
-        </Link>
+        <div>
+          <Link to="" className="navbar--title">
+            Rapid
+          </Link>
+        </div>
+
+        <div className="navbar__search">
+          <input type="text" className="navbar__searchInput" />
+        </div>
 
         <div className="navbar--right">
           <div className="navbar--user">
@@ -27,13 +33,11 @@ const Header = () => {
               <Avatar alt="A" src="/static/images/avatar/1.jpg" />
             </Link>
           </div>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => auth.signOut()}
-          >
-            Sign Out
-          </Button>
+          <div onClick={() => auth.signOut()}>
+            <Button variant="contained" color="secondary">
+              Sign Out
+            </Button>
+          </div>
         </div>
       </nav>
     </Container>

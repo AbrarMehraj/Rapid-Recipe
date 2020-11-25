@@ -63,7 +63,7 @@ body {
 /* Header */
 .navbar {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   margin-bottom: 1.5rem;
 }
@@ -75,6 +75,17 @@ body {
   font-style: oblique;
   text-decoration: underline;
   color: black;
+}
+
+.navbar__search {
+  flex: 1;
+  margin: 0 20px;
+}
+.navbar__searchInput {
+  width: 100%;
+  height: 12px;
+  padding: 13px;
+  outline: none;
 }
 
 .navbar--right {

@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
-import { Button, Divider, Grid, TextField } from "@material-ui/core";
+import { Button, Divider, Grid } from "@material-ui/core";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import { DeleteOutline } from "@material-ui/icons";
@@ -18,10 +18,6 @@ import Modal from "@material-ui/core/Modal";
 import { connect } from "react-redux";
 import firebase from "firebase";
 import { db } from "./firebase";
-
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
 
 function getModalStyle() {
   const top = 50;
@@ -75,12 +71,12 @@ const Post = (props) => {
   const { id, post, user } = props;
   const {
     title,
-    description,
+    // description,
     imageUrl,
     username,
     userId,
-    type,
-    timestamp,
+    // type,
+    // timestamp
   } = post;
 
   // console.log(timestamp);
@@ -136,7 +132,7 @@ const Post = (props) => {
   }, [id]);
 
   // Render html
-  const deleteModal = (
+  const deleteModalBody = (
     <div style={modalStyle} className={classes.paper}>
       <h5 id="simple-modal-title">Are you sure You wanna delete this Post ?</h5>
       <Divider />
@@ -200,7 +196,27 @@ const Post = (props) => {
     </form>
   );
 
-  // Functionality
+  // ############## Functionality  ###############
+  const deleteRenderCondition = () => {
+    if (userId === user.uid) {
+      return (
+        <div>
+          <div onClick={handleOpen}>
+            <DeleteOutline />
+          </div>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+          >
+            {deleteModalBody}
+          </Modal>
+        </div>
+      );
+    }
+  };
+
   const postComment = (e) => {
     e.preventDefault();
 
@@ -252,17 +268,7 @@ const Post = (props) => {
         }
         action={
           <IconButton aria-label="settings">
-            <div onClick={handleOpen}>
-              <DeleteOutline />
-            </div>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-            >
-              {deleteModal}
-            </Modal>
+            {deleteRenderCondition()}
           </IconButton>
         }
         title={username}

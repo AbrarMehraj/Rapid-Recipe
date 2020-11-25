@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import Modal from "@material-ui/core/Modal";
@@ -47,9 +47,9 @@ const Upload = (props) => {
   const [openSelect, setOpenSelect] = useState(false);
 
   // Use State HoOk
-  const history = useHistory();
+  // const history = useHistory();
   const [title, setTitle] = useState("");
-  const [titleError, setTitleError] = useState("");
+  // const [titleError, setTitleError] = useState("");
   const [description, setDescription] = useState("");
   const [progress, setProgress] = useState(0);
   const [buffer, setBuffer] = useState(0);

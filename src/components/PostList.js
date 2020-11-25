@@ -8,7 +8,13 @@ import Spinner from "./Spinner";
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState([]);
-  // const [query, setQuery] = useState("");
+  // const [term, setTerm] = useState("");
+
+  // const searching = posts?.filter((item) =>
+  //   item.post.type.toLowerCase().includes(term.toLocaleLowerCase())
+  // );
+
+  // console.log(searching);
 
   useEffect(() => {
     const unsubs = db
@@ -58,17 +64,6 @@ const PostList = () => {
 
     return (
       <Grid container spacing={4} justify="center">
-        {/* <div className="input__search">
-          <form onClick={searchQuery}>
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <button>Search</button>
-            {query}
-          </form>
-        </div> */}
         {posts ? <div></div> : <Spinner />}
         {posts.map(({ id, post }) => {
           return (
@@ -99,6 +94,12 @@ const PostList = () => {
   return (
     <Container>
       <Filter getType={getType} />
+      {/* <input
+        type="text"
+        placeholder="search"
+        onChange={(e) => setTerm(e.target.value)}
+        value={term}
+      /> */}
       {renderCondition()}
     </Container>
   );
