@@ -37,7 +37,7 @@ const RegisterScreen = ({ history }) => {
         })
         .then(() => history.push('/'))
         .catch((error) => {
-          setError(error);
+          setError(error.message);
           setLoading(false);
         });
     } else {

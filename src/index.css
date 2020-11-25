@@ -15,3 +15,8 @@ code {
 main {
   height: 100vh;
 }
+
+.post__image {
+  height: 360px !important;
+  /* width: 100%; */
+}

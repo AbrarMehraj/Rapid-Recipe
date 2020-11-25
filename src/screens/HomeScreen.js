@@ -5,6 +5,7 @@ import { db } from '../components/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPostList } from '../actions';
 import Loader from '../components/Loader';
+import Slider from '../components/Slider';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const HomeScreen = () => {
     <>
       <h1 className='text-center'>Most Famous Dishes</h1>
       <h5 className='text-center'>Carousel</h5>
+      {/* <Slider /> */}
       <Row>
         {posts.map(({ postId, post }) => {
           return (
