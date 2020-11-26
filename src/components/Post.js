@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { Button, Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
 // eslint-disable-next-line no-unused-vars
@@ -9,19 +9,20 @@ import { db } from './firebase';
 import firebase from 'firebase';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { CardMedia } from '@material-ui/core';
 import moment from 'moment';
 
 const Post = ({ post, id }) => {
   const history = useHistory();
   const userInfo = useSelector((state) => state.userInfo);
 
+  const imageRef = useRef();
+
   const [likes, setLikes] = useState([]);
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState('');
   const found = likes.find((el) => el.uuid === userInfo?.uid);
 
-  console.log(comments);
+  // console.log(comments);
   useEffect(() => {
     let likesUnsubscribe;
     if (id) {
@@ -127,15 +128,21 @@ const Post = ({ post, id }) => {
     }
   };
 
+  console.log(imageRef);
+  // if (imageRef.current?.clientHeight > 180) {
+  //   imageRef.current.clientHeight = 180;
+  // }
+  // console.log(imageRef.current?.clientHeight);
   return (
     <>
-      <Card className='rounded my-3' text='white'>
+      <Card className='rounded my-3' text='white' ref={imageRef}>
         <Card.Header className='py-3' as='h4'>
           <Card.Title>Post by {post.username}</Card.Title>
           <Card.Subtitle>
             {moment.unix(post.timestamp.seconds).format('MMMM Do YYYY, h:mma')}
           </Card.Subtitle>
         </Card.Header>
+
         <LinkContainer to={`/post/${id}`}>
           <Card.Img variant='top' src={post.imageUrl} className='px-1 ' />
         </LinkContainer>

@@ -4,10 +4,10 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { auth } from './firebase';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../actions';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const Header = () => {
-  // const history = useHistory();
+  const history = useHistory();
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.userInfo);
 
@@ -28,6 +28,7 @@ const Header = () => {
 
   const logoutHandler = () => {
     auth.signOut();
+    history.push('/');
   };
 
   return (

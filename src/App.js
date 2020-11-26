@@ -11,6 +11,7 @@ import Header from './components/Header';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import PostScreen from './screens/PostScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path='/login' exact component={LoginScreen} />
           <Route path='/register' exact component={RegisterScreen} />
           <Route path='/post/:id' exact component={PostScreen} />
+          <Route path='/profile' exact component={ProfileScreen} />
         </Container>
       </main>
       {/* <Footer /> */}
