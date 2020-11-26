@@ -53,8 +53,8 @@ const ProfileScreen = ({ history }) => {
     }
   }, [userInfo, history]);
 
+  //   Filtering My Post
   const myPosts = posts.filter((post) => post.post.userId === userInfo.uid);
-  console.log(myPosts);
 
   const onEmailSubmit = (e) => {
     e.preventDefault();
@@ -82,6 +82,15 @@ const ProfileScreen = ({ history }) => {
       .then(function () {
         setEditUsername(false);
         setSuccess('Username Updated');
+
+        // eslint-disable-next-line no-lone-blocks
+        {
+          myPosts.map(({ postId }) => {
+            return db.collection('posts').doc(postId).update({
+              username: userInfo.displayName,
+            });
+          });
+        }
       })
       .catch(function (error) {
         alert(error.message);
@@ -144,48 +153,6 @@ const ProfileScreen = ({ history }) => {
             ) : null}
           </ListGroup.Item>
         </ListGroup>
-        {/* <img src={userInfo.photoURL} alt='' /> */}
-        {/* {error && <Message variant='danger'>{error}</Message>} */}
-        {/* {message ? <Message variant='danger'>{message}</Message> : null} */}
-        {/* {!loading && updated ? ( */}
-        {/* <Message variant='success'>Profile Updated</Message>) : null} */}
-        {/* <Form onSubmit={submitHandler}>
-          <Form.Group controlId='username'>
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              type='username'
-              placeholder='Username'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-          <Form.Group controlId='email'>
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-              type='email'
-              placeholder='user@gmail.com'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-          {/* {loading ? (
-            <Button variant='success' disabled>
-              <Spinner
-                as='span'
-                animation='border'
-                size='sm'
-                role='status'
-                aria-hidden='true'
-                className='mr-2'
-              />
-              Updating...
-            </Button>
-          ) : ( */}
-        {/* )} */}
-        {/* <Button type='submit' variant='dark' className='rounded'> */}
-        {/* Update */}
-        {/* </Button> */}
-        {/* </Form> */}
       </Col>
       <Col md={9} className='mt-3'>
         <h3>My Posts </h3>
@@ -194,7 +161,11 @@ const ProfileScreen = ({ history }) => {
         ) : (
           <>
             {myPosts.map(({ postId, post }) => {
-              return <Post id={postId} post={post} />;
+              return (
+                <ListGroup key={postId} variant='flush'>
+                  <Post id={postId} post={post} />
+                </ListGroup>
+              );
             })}
           </>
         )}

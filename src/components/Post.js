@@ -128,11 +128,6 @@ const Post = ({ post, id }) => {
     }
   };
 
-  console.log(imageRef);
-  // if (imageRef.current?.clientHeight > 180) {
-  //   imageRef.current.clientHeight = 180;
-  // }
-  // console.log(imageRef.current?.clientHeight);
   return (
     <>
       <Card className='rounded my-3' text='white' ref={imageRef}>
@@ -201,7 +196,9 @@ const Post = ({ post, id }) => {
             {renderLikeButton()} <span>{likes?.length}</span>
           </Col>
           <Col className='p-2'>
-            <Link to={`/post/${id}`}>Comments</Link>
+            <Link to={`/post/${id}`} style={{ color: 'white' }}>
+              Comments
+            </Link>
           </Col>
           <Col className='p-2' onClick={onShare}>
             Share
