@@ -1,29 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  ListGroup,
-  Row,
-  Spinner,
-  Table,
-} from 'react-bootstrap';
-// import { updateUserProfile } from '../actions/userActions';
-// import { getMyOrders } from '../actions/orderActions';
+import { Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 import Message from '../components/Message';
 import { db } from '../components/firebase';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Link } from 'react-router-dom';
-// import Loader from '../components/Loader';
-// import { LinkContainer } from 'react-router-bootstrap';
-import moment from 'moment';
 import Post from '../components/Post';
-import firebase from 'firebase';
 
 const ProfileScreen = ({ history }) => {
-  //   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.userInfo);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -32,7 +14,6 @@ const ProfileScreen = ({ history }) => {
   const [editEmail, setEditEmail] = useState(false);
   const [success, setSuccess] = useState('');
 
-  //   console.log(userInfo.providerData);
   useEffect(() => {
     if (userInfo) {
       setUsername(userInfo.displayName);
@@ -163,7 +144,7 @@ const ProfileScreen = ({ history }) => {
             {myPosts.map(({ postId, post }) => {
               return (
                 <ListGroup key={postId} variant='flush'>
-                  <Post id={postId} post={post} />
+                  <Post id={postId} post={post} show />
                 </ListGroup>
               );
             })}

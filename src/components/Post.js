@@ -1,8 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { Button, Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
-// eslint-disable-next-line no-unused-vars
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Form,
+  ListGroup,
+  Row,
+} from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import { db } from './firebase';
@@ -10,20 +17,17 @@ import firebase from 'firebase';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import moment from 'moment';
-import phone from '../images/phone.jpg';
 
-const Post = ({ post, id }) => {
+const Post = ({ post, id, show }) => {
   const history = useHistory();
   const userInfo = useSelector((state) => state.userInfo);
-
-  const imageRef = useRef();
 
   const [likes, setLikes] = useState([]);
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState('');
+
   const found = likes.find((el) => el.uuid === userInfo?.uid);
 
-  // console.log(comments);
   useEffect(() => {
     let likesUnsubscribe;
     if (id) {
@@ -54,6 +58,27 @@ const Post = ({ post, id }) => {
       commentsUnsubscribe();
     };
   }, [id]);
+
+  const renderDelete = () => {
+    const { userId } = post;
+    if (userInfo)
+      if (userInfo.uid === userId) {
+        return (
+          <Dropdown>
+            <Dropdown.Toggle
+              variant='dark'
+              id='dropdown-basic'
+            ></Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item className='p-3'>Update</Dropdown.Item>
+              <Dropdown.Item className='p-3'>Delete</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        );
+      }
+    return null;
+  };
 
   const commentHandler = (e) => {
     e.preventDefault();
@@ -131,27 +156,31 @@ const Post = ({ post, id }) => {
 
   return (
     <>
-      <Card className='rounded my-3' text='white' ref={imageRef}>
-        <Card.Header className='py-3' as='h4'>
-          <Card.Title>Post by {post.username}</Card.Title>
-          <Card.Subtitle>
-            {moment.unix(post.timestamp.seconds).format('MMMM Do YYYY, h:mma')}
-          </Card.Subtitle>
+      <Card className='rounded my-3' text='white'>
+        <Card.Header className='py-3 d-flex justify-content-between' as='h4'>
+          <span>
+            <Card.Title>Post by {post.username}</Card.Title>
+            <Card.Subtitle>
+              {moment
+                .unix(post.timestamp.seconds)
+                .format('MMMM Do YYYY, h:mma')}
+            </Card.Subtitle>
+          </span>
+
+          {/* This show will be send from profile to show this */}
+          {show && renderDelete()}
         </Card.Header>
 
-        <LinkContainer to={`/post/${id}`}>
-          <Card.Img
-            variant='top'
-            // src={post.imageUrl}
-            src={phone}
-            className='px-1 '
-          />
+        <LinkContainer to={`/post/${id}`} style={{ height: '250px' }}>
+          <Card.Img variant='top' src={post.imageUrl} className='px-1 ' />
         </LinkContainer>
 
         <Card.Body>
           <Card.Title>
             Title:
-            <Link to={`/post/${id}`}> {post.title}</Link>
+            <Link to={`/post/${id}`} className='ml-2'>
+              {post.title}
+            </Link>
           </Card.Title>
         </Card.Body>
 
@@ -199,15 +228,15 @@ const Post = ({ post, id }) => {
 
         <Row className='p-2  text-center'>
           <Col className='p-2 '>
-            {renderLikeButton()} <span>{likes?.length} Likes</span>
+            {renderLikeButton()} <span>{likes?.length}</span>
           </Col>
           <Col className='p-2'>
             <Link to={`/post/${id}`} style={{ color: 'white' }}>
-              Comments
+              <i className='fa fa-comments'></i>
             </Link>
           </Col>
           <Col className='p-2' onClick={onShare}>
-            Share
+            <i className='fa fa-paper-plane'></i>
           </Col>
         </Row>
       </Card>

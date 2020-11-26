@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Col, Form, ListGroup, Row, Spinner } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 import { Link } from 'react-router-dom';
 import Message from '../components/Message';
@@ -36,21 +36,6 @@ const LoginScreen = ({ location, history }) => {
     e.preventDefault();
   };
 
-  const forgetpassword = () => {
-    // var auth = firebase.auth();
-    var emailAddress = 'darabrar33@gmail.com';
-
-    auth
-      .sendPasswordResetEmail(emailAddress)
-      .then(function () {
-        // Email sent.
-        alert('send');
-      })
-      .catch(function (error) {
-        // An error happened.
-        alert(error.message);
-      });
-  };
   return (
     <FormContainer>
       <h1 className='mb-3 text-center'>Sign In</h1>

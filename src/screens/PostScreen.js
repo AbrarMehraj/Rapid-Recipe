@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  Card,
-  Col,
-  Image,
-  ListGroup,
-  Row,
-  Tab,
-  Tabs,
-} from 'react-bootstrap';
+import { Button, Col, Image, ListGroup, Row, Tab, Tabs } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { db } from '../components/firebase';
 import moment from 'moment';
@@ -20,9 +11,9 @@ const PostScreen = ({ match }) => {
   const [likes, setLikes] = useState([]);
   const [key, setKey] = useState('home');
 
-  console.log(comments);
-  console.log(likes);
-  console.log(post);
+  // console.log(comments);
+  // console.log(likes);
+  // console.log(post);
 
   useEffect(() => {
     let unsubscribe;
@@ -70,23 +61,39 @@ const PostScreen = ({ match }) => {
         <Button variant='dark'>Go Back</Button>
       </Link>
       {/* <Card> */}
-      <Row className='mt-3'>
+      <Row className='mt-3' style={{ color: 'white' }}>
         <Col md={5}>
           <Image src={post.imageUrl} alt={post.title} fluid />
         </Col>
         <Col md={7}>
           <ListGroup>
-            <ListGroup.Item>Author: {post.username}</ListGroup.Item>
             <ListGroup.Item>
-              Post At:
+              <strong className='mr-2'>Author:</strong>
+              {post.username}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong className='mr-2'>Post At:</strong>
               {moment
                 .unix(post?.timestamp?.seconds)
                 .format('MMMM Do YYYY, h:mma')}
             </ListGroup.Item>
-            <ListGroup.Item>Dish: {post.title}</ListGroup.Item>
-            <ListGroup.Item>Category: {post.type}</ListGroup.Item>
-            <ListGroup.Item>Likes: {likes.length}</ListGroup.Item>
-            <ListGroup.Item>Comments: {comments.length}</ListGroup.Item>
+
+            <ListGroup.Item>
+              <strong className='mr-2'>Dish</strong>
+              {post.title}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong className='mr-2'>Category:</strong>
+              {post.type}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong className='mr-2'>Likes:</strong>
+              {likes.length}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <strong className='mr-2'>Comments:</strong>
+              {comments.length}
+            </ListGroup.Item>
           </ListGroup>
 
           <Tabs

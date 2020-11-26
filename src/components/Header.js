@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import {
   Container,
-  FormControl,
+  Form,
+  // FormControl,
   InputGroup,
   Nav,
   Navbar,
@@ -48,7 +49,7 @@ const Header = () => {
           </LinkContainer>
           <div>
             <InputGroup>
-              <FormControl
+              <Form.Control
                 placeholder='Search Your Recipe'
                 aria-label='search'
                 aria-describedby='basic-addon1'
