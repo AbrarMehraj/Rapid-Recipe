@@ -27,7 +27,6 @@ const ForgetScreen = ({ location, history }) => {
       .sendPasswordResetEmail(email)
       .then(function () {
         // Email sent.
-        alert('send');
         setSuccess('A verification email has been sent to your email');
         setEmail('');
         setLoading(false);
@@ -70,7 +69,7 @@ const ForgetScreen = ({ location, history }) => {
                 size='sm'
                 role='status'
                 aria-hidden='true'
-                className='rounded '
+                className='rounded mr-2 '
               />
               Sending Email...
             </Button>

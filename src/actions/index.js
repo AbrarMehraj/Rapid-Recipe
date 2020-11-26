@@ -4,6 +4,7 @@ import {
   GET_COMMENT_LIST,
   GET_LIKE_LIST,
   GET_POST_LIST,
+  QUERY,
   SET_USER,
 } from '../types/Types';
 
@@ -21,16 +22,9 @@ export const setUser = (user) => {
   };
 };
 
-export const setCommentList = (comments) => {
+export const setTerm = (query) => {
   return {
-    type: GET_COMMENT_LIST,
-    payload: comments,
-  };
-};
-
-export const setLikeList = (likes) => {
-  return {
-    type: GET_LIKE_LIST,
-    payload: likes,
+    type: QUERY,
+    payload: query,
   };
 };

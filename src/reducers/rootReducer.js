@@ -1,4 +1,9 @@
-import { GET_COMMENT_LIST, GET_POST_LIST, SET_USER } from '../types/Types';
+import {
+  GET_COMMENT_LIST,
+  GET_POST_LIST,
+  QUERY,
+  SET_USER,
+} from '../types/Types';
 
 export const postListReducer = (state = {}, action) => {
   switch (action.type) {
@@ -20,9 +25,9 @@ export const userDetailsReducer = (state = {}, action) => {
   }
 };
 
-export const commentListReducer = (state = {}, action) => {
+export const queryReducer = (state = '', action) => {
   switch (action.type) {
-    case GET_COMMENT_LIST:
+    case QUERY:
       return action.payload;
 
     default:

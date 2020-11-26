@@ -10,6 +10,7 @@ import Loader from '../components/Loader';
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.postList);
+  const query = useSelector((state) => state.query);
 
   useEffect(() => {
     db.collection('posts')
@@ -26,24 +27,38 @@ const HomeScreen = () => {
       });
   }, [dispatch]);
 
-  if (!posts) {
-    return <Loader />;
-  }
+  const displayOnSearch = posts?.filter(({ post }) =>
+    post.title.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
     <>
-      <h1 className='text-center'>Most Famous Dishes</h1>
-      <h5 className='text-center'>Carousel</h5>
-      {/* <Slider /> */}
-      <Row>
-        {posts.map(({ postId, post }) => {
-          return (
-            <Col key={postId} sm={12} md={6} lg={4} xl={3}>
-              <Post id={postId} post={post} />
-            </Col>
-          );
-        })}
-      </Row>
+      {!posts ? (
+        <Loader />
+      ) : (
+        <>
+          <h1 className='text-center'>Most Famous Dishes</h1>
+          <h5 className='text-center'>Carousel</h5>
+          {/* <Slider /> */}
+          <Row>
+            {query && displayOnSearch
+              ? displayOnSearch.map(({ postId, post }) => {
+                  return (
+                    <Col key={postId} sm={12} md={6} lg={4} xl={3}>
+                      <Post id={postId} post={post} />
+                    </Col>
+                  );
+                })
+              : posts.map(({ postId, post }) => {
+                  return (
+                    <Col key={postId} sm={12} md={6} lg={4} xl={3}>
+                      <Post id={postId} post={post} />
+                    </Col>
+                  );
+                })}
+          </Row>
+        </>
+      )}
     </>
   );
 };

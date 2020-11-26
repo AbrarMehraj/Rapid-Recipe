@@ -2,13 +2,13 @@
 
 import { combineReducers } from 'redux';
 import {
-  commentListReducer,
   postListReducer,
+  queryReducer,
   userDetailsReducer,
 } from './rootReducer';
 
 export default combineReducers({
   postList: postListReducer,
   userInfo: userDetailsReducer,
-  commentList: commentListReducer,
+  query: queryReducer,
 });
