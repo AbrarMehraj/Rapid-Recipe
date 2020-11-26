@@ -1,9 +1,4 @@
-import {
-  GET_COMMENT_LIST,
-  GET_POST_LIST,
-  QUERY,
-  SET_USER,
-} from '../types/Types';
+import { GET_POST_LIST, QUERY, SET_USER } from '../types/Types';
 
 export const postListReducer = (state = {}, action) => {
   switch (action.type) {

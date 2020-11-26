@@ -10,6 +10,7 @@ import firebase from 'firebase';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import moment from 'moment';
+import phone from '../images/phone.jpg';
 
 const Post = ({ post, id }) => {
   const history = useHistory();
@@ -139,7 +140,12 @@ const Post = ({ post, id }) => {
         </Card.Header>
 
         <LinkContainer to={`/post/${id}`}>
-          <Card.Img variant='top' src={post.imageUrl} className='px-1 ' />
+          <Card.Img
+            variant='top'
+            // src={post.imageUrl}
+            src={phone}
+            className='px-1 '
+          />
         </LinkContainer>
 
         <Card.Body>
@@ -157,14 +163,14 @@ const Post = ({ post, id }) => {
             </strong>
             {comments[0]?.text}
 
-            <Card.Subtitle className='mt-3'>
+            <Card.Subtitle className='mt-1'>
               {moment
                 .unix(comments[0]?.timestamp?.seconds)
                 .format('MMMM Do YYYY, h:mma')}
             </Card.Subtitle>
           </ListGroup.Item>
 
-          <ListGroup.Item className='mb-n2'>
+          <ListGroup.Item className='mb-n3'>
             {userInfo ? (
               <Form onSubmit={commentHandler}>
                 <Form.Group
@@ -191,9 +197,9 @@ const Post = ({ post, id }) => {
           </ListGroup.Item>
         </ListGroup>
 
-        <Row className='p-2 text-center'>
+        <Row className='p-2  text-center'>
           <Col className='p-2 '>
-            {renderLikeButton()} <span>{likes?.length}</span>
+            {renderLikeButton()} <span>{likes?.length} Likes</span>
           </Col>
           <Col className='p-2'>
             <Link to={`/post/${id}`} style={{ color: 'white' }}>

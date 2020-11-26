@@ -1,0 +1,40 @@
+[debug] [2020-11-26T14:50:11.907Z] ----------------------------------------------------------------------
+[debug] [2020-11-26T14:50:11.910Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Faiq\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2020-11-26T14:50:11.910Z] CLI Version:   8.15.0
+[debug] [2020-11-26T14:50:11.911Z] Platform:      win32
+[debug] [2020-11-26T14:50:11.911Z] Node Version:  v14.15.1
+[debug] [2020-11-26T14:50:11.912Z] Time:          Thu Nov 26 2020 20:20:11 GMT+0530 (India Standard Time)
+[debug] [2020-11-26T14:50:11.912Z] ----------------------------------------------------------------------
+[debug] [2020-11-26T14:50:11.912Z] 
+[debug] [2020-11-26T14:50:11.922Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-11-26T14:50:11.923Z] > authorizing via signed-in user
+[debug] [2020-11-26T14:50:11.923Z] [iam] checking project rapid-13334 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-11-26T14:50:11.927Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/rapid-13334:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2020-11-26T14:50:21.696Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 26 Nov 2020 14:50:25 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=1442","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-11-26T14:50:21.699Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/rapid-13334  
+ 
+[debug] [2020-11-26T14:50:22.837Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 26 Nov 2020 14:50:26 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'rapid-13334'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2020-11-26T14:50:22.846Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/rapid-13334/versions  
+ {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2020-11-26T14:50:25.506Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 26 Nov 2020 14:50:29 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] i  hosting[rapid-13334]: beginning deploy... 
+[info] i  hosting[rapid-13334]: found 19 files in build 
+[debug] [2020-11-26T14:50:26.436Z] [hosting] hash cache [YnVpbGQ] stored for 19 files
+[debug] [2020-11-26T14:50:26.437Z] [hosting][hash queue][FINAL] {"max":902,"min":4,"avg":74.6842105263158,"active":0,"complete":19,"success":19,"errored":0,"retried":0,"total":19,"elapsed":911}
+[debug] [2020-11-26T14:50:26.437Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/rapid-13334/versions/24f6de4579869627:populateFiles  
+ <request body omitted>
+[debug] [2020-11-26T14:50:28.488Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 26 Nov 2020 14:50:32 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-11-26T14:50:28.494Z] [hosting][populate queue][FINAL] {"max":2056,"min":2056,"avg":2056,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":2060}
+[debug] [2020-11-26T14:50:28.494Z] [hosting] uploads queued: 9
+[debug] [2020-11-26T14:50:45.006Z] [uploadQueue] Retrying task 1b579bdc578cf8139f871b2027dafa70306991dd84873bcb505832e28623986d
+[debug] [2020-11-26T14:50:45.697Z] [uploadQueue] Retrying task 007341b580aa5807a1c8273329bd5705b669365ded014f3528a996c0e096611e
+[debug] [2020-11-26T14:50:46.573Z] [uploadQueue] Retrying task e1d80abe5697145ba031905b3858b665d80d187d42f416f41db62690b01d4755
+[debug] [2020-11-26T14:51:29.207Z] [uploadQueue] Retrying task 8b5f29caa8953e2085a1fddc6d6b557a21b0ab233664811a2e8392ba6c574286
+[debug] [2020-11-26T14:51:29.213Z] [uploadQueue] Retrying task a8190c027fc0c54c9473aae1606079089de8a177f9e4ea764cbfe4390ede9d13
+[debug] [2020-11-26T14:52:00.438Z] [uploadQueue] Retrying task a8190c027fc0c54c9473aae1606079089de8a177f9e4ea764cbfe4390ede9d13
+[debug] [2020-11-26T14:53:30.364Z] [uploadQueue] Retrying task ba88f2470bba443dee86b74586ef34c948c7423fd1d7a2658752135c01a3074c
