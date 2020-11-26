@@ -149,7 +149,7 @@ const Post = ({ post, id }) => {
 
         <Card.Body>
           <Card.Title>
-            Card Title:
+            Title:
             <Link to={`/post/${id}`}> {post.title}</Link>
           </Card.Title>
         </Card.Body>
@@ -201,7 +201,7 @@ const Post = ({ post, id }) => {
             {renderLikeButton()} <span>{likes?.length}</span>
           </Col>
           <Col className='p-2'>
-            <Link to={`/post/${id}`}>comments</Link>
+            <Link to={`/post/${id}`}>Comments</Link>
           </Col>
           <Col className='p-2' onClick={onShare}>
             Share
