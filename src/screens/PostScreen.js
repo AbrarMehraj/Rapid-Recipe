@@ -90,7 +90,7 @@ const PostScreen = ({ match, history }) => {
         <Col md={7}>
           <ListGroup>
             <ListGroup.Item>
-              <strong className='mr-2'>Author:</strong>
+              <strong className='mr-2'>Post By:</strong>
               {post.username}
             </ListGroup.Item>
             <ListGroup.Item>
@@ -101,7 +101,7 @@ const PostScreen = ({ match, history }) => {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <strong className='mr-2'>Dish Name:</strong>
+              <strong className='mr-2'>Recipe Name:</strong>
               {post.title}
             </ListGroup.Item>
             <ListGroup.Item>

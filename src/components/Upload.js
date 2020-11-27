@@ -20,8 +20,8 @@ const Upload = () => {
   };
 
   return (
-    <div>
-      <Button variant='dark' onClick={handleUpload}>
+    <>
+      <Button variant='dark' onClick={handleUpload} className='float-right'>
         <i className='fa fa-plus'></i>
       </Button>
 
@@ -29,7 +29,7 @@ const Upload = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-    </div>
+    </>
   );
 };
 

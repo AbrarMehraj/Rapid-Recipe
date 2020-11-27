@@ -184,9 +184,9 @@ const Post = ({ post, id, show }) => {
           <Card.Img variant='top' src={post.imageUrl} className='px-1 ' />
         </LinkContainer>
 
-        <Card.Body>
+        <Card.Body className='my-n1'>
           <Card.Title>
-            Title:
+            Recipe:
             <Link to={`/post/${id}`} className='ml-2'>
               {post.title}
             </Link>
@@ -232,7 +232,6 @@ const Post = ({ post, id, show }) => {
                 </Button>
               </Form.Group>
             </Form>
-            {/* ) : null} */}
           </ListGroup.Item>
         </ListGroup>
 

@@ -41,6 +41,7 @@ const Header = () => {
 
   return (
     <header>
+      {process.env.API_KEY}
       <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect>
         <Container>
           <LinkContainer to='/'>
