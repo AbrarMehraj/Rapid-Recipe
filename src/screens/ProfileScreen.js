@@ -80,7 +80,7 @@ const ProfileScreen = ({ history }) => {
 
   return (
     <Row>
-      <Col md={3}>
+      <Col md={4}>
         <h2>Profile</h2>
         {success && <Message variant='success'>{success}</Message>}
         <ListGroup>
@@ -135,7 +135,7 @@ const ProfileScreen = ({ history }) => {
           </ListGroup.Item>
         </ListGroup>
       </Col>
-      <Col md={9} className='mt-3'>
+      <Col md={8} className='mt-3'>
         <h3>My Posts </h3>
         {myPosts.length === 0 ? (
           <span>You have not upload any post yet feel free to upload</span>

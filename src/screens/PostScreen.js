@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Image, ListGroup, Row, Tab, Tabs } from 'react-bootstrap';
+import {
+  Button,
+  Col,
+  Form,
+  Image,
+  ListGroup,
+  Row,
+  Tab,
+  Tabs,
+} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { db } from '../components/firebase';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 
-const PostScreen = ({ match }) => {
+const PostScreen = ({ match, history }) => {
   const postId = match.params.id;
   const [post, setPost] = useState([]);
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
-  const [key, setKey] = useState('home');
+  const [key, setKey] = useState('procedure');
+  const [commentInput, setCommentInput] = useState('');
 
-  // console.log(comments);
-  // console.log(likes);
-  // console.log(post);
+  const userInfo = useSelector((state) => state.userInfo);
 
   useEffect(() => {
     let unsubscribe;
@@ -55,12 +64,25 @@ const PostScreen = ({ match }) => {
       unsubscribe();
     };
   }, [postId]);
+
+  const commentHandler = (e) => {
+    e.preventDefault();
+    if (userInfo) {
+      db.collection('posts').doc(postId).collection('comments').add({
+        timestamp: Date.now(),
+        text: commentInput,
+        username: userInfo.displayName,
+      });
+      setCommentInput('');
+    } else {
+      history.push('/login');
+    }
+  };
   return (
     <>
       <Link to='/'>
         <Button variant='dark'>Go Back</Button>
       </Link>
-      {/* <Card> */}
       <Row className='mt-3' style={{ color: 'white' }}>
         <Col md={5}>
           <Image src={post.imageUrl} alt={post.title} fluid />
@@ -72,14 +94,14 @@ const PostScreen = ({ match }) => {
               {post.username}
             </ListGroup.Item>
             <ListGroup.Item>
-              <strong className='mr-2'>Post At:</strong>
+              <strong className='mr-2'>Posted At:</strong>
               {moment
                 .unix(post?.timestamp?.seconds)
                 .format('MMMM Do YYYY, h:mma')}
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <strong className='mr-2'>Dish</strong>
+              <strong className='mr-2'>Dish Name:</strong>
               {post.title}
             </ListGroup.Item>
             <ListGroup.Item>
@@ -102,7 +124,7 @@ const PostScreen = ({ match }) => {
             onSelect={(k) => setKey(k)}
             className='justify-content-between'
           >
-            <Tab eventKey='home' title='Procedure'>
+            <Tab eventKey='procedure' title='Procedure'>
               <ListGroup.Item>{post.description}</ListGroup.Item>
             </Tab>
             <Tab eventKey='comment' title='Comments '>
@@ -129,8 +151,30 @@ const PostScreen = ({ match }) => {
                 </ListGroup>
               )}
             </Tab>
-            <Tab eventKey='likes' title='Comment Here'>
-              <input type='text' />
+            <Tab eventKey='commentHere' title='Comment Here'>
+              <ListGroup.Item>
+                <Form onSubmit={commentHandler} className='mb-n3'>
+                  <Form.Group
+                    controlId='commentHere'
+                    style={{ display: 'flex' }}
+                  >
+                    <Form.Control
+                      type='text'
+                      placeholder='Enter Comment'
+                      value={commentInput}
+                      onChange={(e) => setCommentInput(e.target.value)}
+                    />
+                    <Button
+                      type='submit'
+                      variant='dark'
+                      className='ml-2 rounded'
+                      disabled={!commentInput}
+                    >
+                      Post
+                    </Button>
+                  </Form.Group>
+                </Form>
+              </ListGroup.Item>
             </Tab>
           </Tabs>
         </Col>

@@ -1,12 +1,6 @@
 /** @format */
 
-import {
-  GET_COMMENT_LIST,
-  GET_LIKE_LIST,
-  GET_POST_LIST,
-  QUERY,
-  SET_USER,
-} from '../types/Types';
+import { GET_POST_LIST, QUERY, SET_USER } from '../types/Types';
 
 export const getPostList = (posts) => {
   return {

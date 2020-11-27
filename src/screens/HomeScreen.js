@@ -5,7 +5,8 @@ import { db } from '../components/firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPostList } from '../actions';
 import Loader from '../components/Loader';
-// import Slider from '../components/Slider';
+import Slider from '../components/Slider';
+import Upload from '../components/Upload';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -37,9 +38,10 @@ const HomeScreen = () => {
         <Loader />
       ) : (
         <>
-          <h1 className='text-center'>Most Famous Dishes</h1>
-          <h5 className='text-center'>Carousel</h5>
-          {/* <Slider /> */}
+          <Upload />
+
+          <h1 className='text-center'>Most Famous Dish</h1>
+          <Slider />
           <Row>
             {query && displayOnSearch
               ? displayOnSearch.map(({ postId, post }) => {
