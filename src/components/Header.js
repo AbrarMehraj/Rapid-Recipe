@@ -1,42 +1,98 @@
-import React from "react";
-import { Avatar, Button, Container } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { auth } from "./firebase";
+import React, { useEffect } from 'react';
+import { LinkContainer } from 'react-router-bootstrap';
+import {
+  Container,
+  Form,
+  InputGroup,
+  Nav,
+  Navbar,
+  NavDropdown,
+} from 'react-bootstrap';
+import { auth } from './firebase';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser, setTerm } from '../actions';
+import { useHistory } from 'react-router-dom';
 
 const Header = () => {
-  return (
-    <Container
-      style={{
-        position: "sticky",
-        top: "0",
-        zIndex: "10",
-        background: "repeating-linear-gradient(-45deg, #f44336, #6085d3 100px)",
-      }}
-    >
-      <center>
-        <strong>Under Development</strong>
-      </center>
-      <nav className="navbar">
-        <Link to="" className="navbar--title">
-          Rapid
-        </Link>
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.userInfo);
+  const query = useSelector((state) => state.query);
 
-        <div className="navbar--right">
-          <div className="navbar--user">
-            <Link to="account/profile">
-              <Avatar alt="A" src="/static/images/avatar/1.jpg" />
-            </Link>
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        dispatch(setUser(authUser));
+      } else {
+        dispatch(setUser(null));
+      }
+    });
+
+    return () => {
+      // perform some cleanup actions need to look again on useEffect
+      unsubscribe();
+    };
+  }, [dispatch]);
+
+  const logoutHandler = () => {
+    auth.signOut();
+    history.push('/');
+  };
+
+  return (
+    <header>
+      {process.env.API_KEY}
+      <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect>
+        <Container>
+          <LinkContainer to='/'>
+            <Navbar.Brand>Rapid-Recipe</Navbar.Brand>
+          </LinkContainer>
+          <div>
+            <InputGroup>
+              <Form.Control
+                placeholder='Search Your Recipe'
+                aria-label='search'
+                aria-describedby='basic-addon1'
+                value={query}
+                onChange={(e) => dispatch(setTerm(e.target.value))}
+              />
+              <InputGroup.Prepend>
+                <InputGroup.Text id='basic-addon1'>
+                  <i className='fas fa-search'></i>
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+            </InputGroup>
           </div>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => auth.signOut()}
-          >
-            Sign Out
-          </Button>
-        </div>
-      </nav>
-    </Container>
+
+          <Navbar.Toggle aria-controls='navbar-nav' />
+          <Navbar.Collapse id='navbar-nav'>
+            <Nav className='ml-auto '>
+              {userInfo ? (
+                <NavDropdown title={userInfo.displayName || ''} id='username'>
+                  <LinkContainer to='/profile'>
+                    <NavDropdown.Item className='light p-3'>
+                      Profile
+                    </NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item
+                    onClick={logoutHandler}
+                    className='light p-3'
+                  >
+                    Log Out
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to='/login'>
+                  <Nav.Link>
+                    <i className='fas fa-user mr-2'></i> Sign In
+                  </Nav.Link>
+                </LinkContainer>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </header>
   );
 };
 

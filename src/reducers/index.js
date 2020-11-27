@@ -1,10 +1,14 @@
 /** @format */
 
-import { combineReducers } from "redux";
-import { posts } from "./rootReducer";
-import { User } from "./rootReducer";
+import { combineReducers } from 'redux';
+import {
+  postListReducer,
+  queryReducer,
+  userDetailsReducer,
+} from './rootReducer';
 
 export default combineReducers({
-  posts,
-  User,
+  postList: postListReducer,
+  userInfo: userDetailsReducer,
+  query: queryReducer,
 });
