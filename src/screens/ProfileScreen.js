@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 import Message from '../components/Message';
 import { db } from '../components/firebase';
@@ -30,7 +30,7 @@ const ProfileScreen = ({ history }) => {
           );
         });
     } else {
-      history.push('/');
+      history.push('/login');
     }
   }, [userInfo, history]);
 
@@ -78,6 +78,10 @@ const ProfileScreen = ({ history }) => {
       });
   };
 
+  if (!userInfo) {
+    history.push('/login');
+    return null;
+  }
   return (
     <Row>
       <Col md={4}>

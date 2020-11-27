@@ -12,7 +12,6 @@ import { auth } from './firebase';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser, setTerm } from '../actions';
 import { useHistory } from 'react-router-dom';
-import Upload from './Upload';
 
 const Header = () => {
   const history = useHistory();
