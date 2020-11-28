@@ -1,4 +1,4 @@
-import { GET_POST_LIST, QUERY, SET_USER } from '../types/Types';
+import { GET_POST_LIST, QUERY, SET_USER, QUERY_RESET } from '../types/Types';
 
 export const postListReducer = (state = {}, action) => {
   switch (action.type) {
@@ -24,6 +24,9 @@ export const queryReducer = (state = '', action) => {
   switch (action.type) {
     case QUERY:
       return action.payload;
+
+    case QUERY_RESET:
+      return '';
 
     default:
       return state;

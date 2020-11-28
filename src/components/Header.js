@@ -19,6 +19,8 @@ const Header = () => {
   const userInfo = useSelector((state) => state.userInfo);
   const query = useSelector((state) => state.query);
 
+  const isAdmin = userInfo?.uid === 'V2rYzVU3piSRYq04FZ6GGC8gBcy1';
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
@@ -41,7 +43,6 @@ const Header = () => {
 
   return (
     <header>
-      {process.env.API_KEY}
       <Navbar bg='dark' variant='dark' expand='md' collapseOnSelect>
         <Container>
           <LinkContainer to='/'>
@@ -87,6 +88,22 @@ const Header = () => {
                     <i className='fas fa-user mr-2'></i> Sign In
                   </Nav.Link>
                 </LinkContainer>
+              )}
+
+              {userInfo && isAdmin && (
+                <NavDropdown title='Admin' id='adminmenu'>
+                  <LinkContainer to='/admin/userlist'>
+                    <NavDropdown.Item className='light p-3'>
+                      Users
+                    </NavDropdown.Item>
+                  </LinkContainer>
+
+                  <LinkContainer to='/admin/postList'>
+                    <NavDropdown.Item className='light p-3'>
+                      Posts
+                    </NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
               )}
             </Nav>
           </Navbar.Collapse>

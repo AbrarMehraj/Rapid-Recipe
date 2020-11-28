@@ -18,7 +18,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import moment from 'moment';
 
-const Post = ({ post, id, show }) => {
+const Post = ({ post, id, show, isAdmin }) => {
   const history = useHistory();
   const userInfo = useSelector((state) => state.userInfo);
 
@@ -48,8 +48,8 @@ const Post = ({ post, id, show }) => {
 
   const renderDelete = () => {
     const { userId } = post;
-    if (userInfo)
-      if (userInfo.uid === userId) {
+    if (userInfo || isAdmin)
+      if (userInfo.uid === userId || isAdmin) {
         return (
           <Dropdown>
             <Dropdown.Toggle
@@ -72,7 +72,7 @@ const Post = ({ post, id, show }) => {
   const onDeletePost = () => {
     const { userId } = post;
     if (window.confirm('Are You Sure ?'))
-      if (userInfo.uid === userId) {
+      if (userInfo.uid === userId || isAdmin) {
         db.collection('posts')
           .doc(id)
           .delete()
@@ -100,7 +100,6 @@ const Post = ({ post, id, show }) => {
   };
 
   const onLike = () => {
-    console.log('OnLike');
     db.collection('posts').doc(id).collection('likes').add({
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       uuid: userInfo.uid,
@@ -108,7 +107,6 @@ const Post = ({ post, id, show }) => {
   };
 
   const onUnLike = () => {
-    console.log('OnUnLike');
     if (found?.uuid) {
       db.collection('posts')
         .doc(id)
