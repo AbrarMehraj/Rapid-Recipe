@@ -7,8 +7,11 @@ import { Button } from 'react-bootstrap';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import { useDispatch } from 'react-redux';
+import { QUERY_RESET } from '../types/Types';
 
 export default function Filter({ getType }) {
+  const dispatch = useDispatch();
   const [value, setValue] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -28,6 +31,7 @@ export default function Filter({ getType }) {
     setAnchorEl(null);
     getType(value);
     setValue('');
+    dispatch({ type: QUERY_RESET });
   };
 
   return (

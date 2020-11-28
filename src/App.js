@@ -12,6 +12,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import PostScreen from './screens/PostScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ForgetScreen from './screens/ForgetScreen';
+import PostListScreen from './screens/PostListScreen';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path='/register' exact component={RegisterScreen} />
           <Route path='/post/:id' exact component={PostScreen} />
           <Route path='/profile' exact component={ProfileScreen} />
+          <Route path='/admin/postlist' exact component={PostListScreen} />
         </Container>
       </main>
       <Footer />
