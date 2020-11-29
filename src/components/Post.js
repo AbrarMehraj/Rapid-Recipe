@@ -163,7 +163,7 @@ const Post = ({ post, id, show, isAdmin }) => {
 
   return (
     <>
-      <Card className='rounded my-3' text='white'>
+      <Card className='rounded my-3 hover' text='white'>
         <Card.Header className='py-3 d-flex justify-content-between' as='h4'>
           <span>
             <Card.Title>Post by {post.username}</Card.Title>

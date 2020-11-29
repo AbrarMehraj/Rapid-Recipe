@@ -87,7 +87,7 @@ const HomeScreen = () => {
           ) : query && displayOnSearch ? null : (
             <Slider />
           )}
-          <Row>{renderOnCondition()}</Row>
+          <Row className='justify-content-between'>{renderOnCondition()}</Row>
         </>
       )}
     </>

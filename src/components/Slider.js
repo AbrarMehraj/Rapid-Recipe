@@ -14,13 +14,28 @@ const Slider = () => {
   return (
     <Carousel activeIndex={index} onSelect={handleSelect} interval={1500}>
       <Carousel.Item>
-        <img className='d-block w-100' src={img1} alt='First slide' />
+        <img
+          className='d-block w-100 '
+          src={img1}
+          alt='First slide'
+          style={{ height: '500px' }}
+        />
       </Carousel.Item>
       <Carousel.Item>
-        <img className='d-block w-100' src={img2} alt='Second slide' />
+        <img
+          style={{ height: '500px' }}
+          className='d-block w-100'
+          src={img2}
+          alt='Second slide'
+        />
       </Carousel.Item>
       <Carousel.Item>
-        <img className='d-block w-100' src={img3} alt='Third slide' />
+        <img
+          style={{ height: '500px' }}
+          className='d-block w-100'
+          src={img3}
+          alt='Third slide'
+        />
       </Carousel.Item>
     </Carousel>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Col, ListGroup, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { db } from '../components/firebase';
 import Post from '../components/Post';
 import { getPostList } from '../actions';
@@ -39,13 +39,15 @@ const ProfileScreen = ({ history }) => {
           <span>No Posts</span>
         ) : (
           <>
-            {posts?.map(({ postId, post }) => {
-              return (
-                <ListGroup key={postId} variant='flush'>
-                  <Post id={postId} post={post} show isAdmin />
-                </ListGroup>
-              );
-            })}
+            <Row>
+              {posts?.map(({ postId, post }) => {
+                return (
+                  <Col key={postId} sm={12} md={6} lg={4} xl={3}>
+                    <Post id={postId} post={post} show isAdmin />
+                  </Col>
+                );
+              })}
+            </Row>
           </>
         )}
       </Col>
