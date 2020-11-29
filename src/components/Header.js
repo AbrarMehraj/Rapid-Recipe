@@ -19,7 +19,7 @@ const Header = () => {
   const userInfo = useSelector((state) => state.userInfo);
   const query = useSelector((state) => state.query);
 
-  const isAdmin = userInfo?.uid === 'V2rYzVU3piSRYq04FZ6GGC8gBcy1';
+  const isAdmin = userInfo?.uid === process.env.REACT_APP_IS_ADMIN;
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -92,12 +92,6 @@ const Header = () => {
 
               {userInfo && isAdmin && (
                 <NavDropdown title='Admin' id='adminmenu'>
-                  <LinkContainer to='/admin/userlist'>
-                    <NavDropdown.Item className='light p-3'>
-                      Users
-                    </NavDropdown.Item>
-                  </LinkContainer>
-
                   <LinkContainer to='/admin/postList'>
                     <NavDropdown.Item className='light p-3'>
                       Posts

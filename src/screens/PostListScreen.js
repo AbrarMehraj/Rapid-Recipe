@@ -10,7 +10,7 @@ const ProfileScreen = ({ history }) => {
   const userInfo = useSelector((state) => state.userInfo);
   const { posts } = useSelector((state) => state.postList);
 
-  const isAdmin = userInfo?.uid === 'V2rYzVU3piSRYq04FZ6GGC8gBcy1';
+  const isAdmin = userInfo?.uid === process.env.REACT_APP_IS_ADMIN;
 
   useEffect(() => {
     if (isAdmin) {
