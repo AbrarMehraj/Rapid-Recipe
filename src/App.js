@@ -4,7 +4,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './bootstrap.min.css';
 import { Container } from 'react-bootstrap';
-import Footer from './components/Footer';
+// import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
 import Header from './components/Header';
 import LoginScreen from './screens/LoginScreen';
@@ -13,6 +13,8 @@ import PostScreen from './screens/PostScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ForgetScreen from './screens/ForgetScreen';
 import PostListScreen from './screens/PostListScreen';
+import CreateOrderScreen from './screens/CreateOrderScreen';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -26,10 +28,20 @@ function App() {
           <Route path='/register' exact component={RegisterScreen} />
           <Route path='/post/:id' exact component={PostScreen} />
           <Route path='/profile' exact component={ProfileScreen} />
-          <Route path='/admin/postlist' exact component={PostListScreen} />
+          <ProtectedRoute
+            path='/admin/postlist'
+            exact
+            component={PostListScreen}
+          />
+          <ProtectedRoute
+            path='/admin/createorder'
+            exact
+            component={CreateOrderScreen}
+          />
+          {/* <Route path='/*' exact component={() => <div>Page Not Found</div>} /> */}
         </Container>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </Router>
   );
 }

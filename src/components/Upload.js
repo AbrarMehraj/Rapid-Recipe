@@ -75,7 +75,7 @@ function MyVerticallyCenteredModal(props) {
           .getDownloadURL()
           .then((url) => {
             //    put image inside the db
-            db.collection('posts').add({
+            db.collection('orders').add({
               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
               title: dishName,
               description: procedure,

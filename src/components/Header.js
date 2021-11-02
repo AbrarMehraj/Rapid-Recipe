@@ -19,7 +19,7 @@ const Header = () => {
   const userInfo = useSelector((state) => state.userInfo);
   const query = useSelector((state) => state.query);
 
-  const isAdmin = userInfo?.uid === 'V2rYzVU3piSRYq04FZ6GGC8gBcy1';
+  const isAdmin = userInfo?.uid === 'Tj1Fu400buSxKyvsl32ES2nya003';
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -35,6 +35,8 @@ const Header = () => {
       unsubscribe();
     };
   }, [dispatch]);
+
+  console.log(userInfo);
 
   const logoutHandler = () => {
     auth.signOut();
@@ -101,6 +103,18 @@ const Header = () => {
                   <LinkContainer to='/admin/postList'>
                     <NavDropdown.Item className='light p-3'>
                       Posts
+                    </NavDropdown.Item>
+                  </LinkContainer>
+
+                  <LinkContainer to='/admin/orders'>
+                    <NavDropdown.Item className='light p-3'>
+                      Orders
+                    </NavDropdown.Item>
+                  </LinkContainer>
+
+                  <LinkContainer to='/admin/createorder'>
+                    <NavDropdown.Item className='light p-3'>
+                      Create Order
                     </NavDropdown.Item>
                   </LinkContainer>
                 </NavDropdown>
