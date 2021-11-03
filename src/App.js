@@ -15,6 +15,7 @@ import ForgetScreen from './screens/ForgetScreen';
 import PostListScreen from './screens/PostListScreen';
 import CreateOrderScreen from './screens/CreateOrderScreen';
 import ProtectedRoute from './components/ProtectedRoute';
+import OrdersScreen from './screens/OrdersScreen';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path='/register' exact component={RegisterScreen} />
           <Route path='/post/:id' exact component={PostScreen} />
           <Route path='/profile' exact component={ProfileScreen} />
+          <Route path='/admin/orders' exact component={OrdersScreen} />
           <ProtectedRoute
             path='/admin/postlist'
             exact
