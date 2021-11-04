@@ -40,6 +40,12 @@ function App() {
             exact
             component={CreateOrderScreen}
           />
+
+          <ProtectedRoute
+            path='/admin/createorder/edit/:id'
+            exact
+            component={CreateOrderScreen}
+          />
           {/* <Route path='/*' exact component={() => <div>Page Not Found</div>} /> */}
         </Container>
       </main>

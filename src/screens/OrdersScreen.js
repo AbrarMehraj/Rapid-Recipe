@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  ListGroup,
+  Row,
+  Tab,
+  Tabs,
+} from 'react-bootstrap';
 import { db } from '../components/firebase';
 import moment from 'moment';
+import { useHistory } from 'react-router';
+
+const tabs = [
+  { title: 'PENDING' },
+  { title: 'CONFIRM' },
+  { title: 'DISPATCH' },
+  { title: 'CANCELLED' },
+  { title: 'DELIVERED' },
+];
 
 const ProfileScreen = ({ history }) => {
   const dispatch = useDispatch();
   const [orders, setOrders] = useState('');
   const [loader, setLoader] = useState(true);
+  const [key, setKey] = useState('PENDING');
   const userInfo = useSelector((state) => state.userInfo);
 
   const isAdmin = userInfo?.uid === 'Tj1Fu400buSxKyvsl32ES2nya003';
@@ -19,7 +38,7 @@ const ProfileScreen = ({ history }) => {
         .onSnapshot((snapshot) => {
           setOrders(
             snapshot.docs.map((doc) => ({
-              //   orderId: doc.id,
+              order_id: doc.id,
               order: doc.data(),
             }))
           );
@@ -30,21 +49,42 @@ const ProfileScreen = ({ history }) => {
     }
   }, [dispatch, isAdmin, history]);
 
-  console.log(orders);
+  // console.log(orders);
   return (
     <Row>
       <Col className='mt-3'>
-        <h3>Orders </h3>
+        {/* <h3>Orders </h3> */}
+        <Tabs
+          id='controlled-tab-example'
+          activeKey={key}
+          onSelect={(k) => setKey(k)}
+          className='justify-content-between'
+        >
+          {!loader &&
+            tabs.map((tab, i) => {
+              return (
+                <Tab key={i} eventKey={tab.title} title={tab.title}>
+                  {orders &&
+                    orders.length > 0 &&
+                    orders.map((val, i) => {
+                      return (
+                        <ListGroup key={i} variant='flush'>
+                          <Order
+                            order_id={val.order_id}
+                            order={val.order}
+                            filterByStatus={tab.title}
+                            show
+                            isAdmin
+                          />
+                        </ListGroup>
+                      );
+                    })}
+                </Tab>
+              );
+            })}
+        </Tabs>
+
         {loader && 'Loading'}
-        {orders &&
-          orders.length > 0 &&
-          orders.map((val, i) => {
-            return (
-              <ListGroup key={i} variant='flush'>
-                <Order id={i} order={val.order} show isAdmin />
-              </ListGroup>
-            );
-          })}
       </Col>
     </Row>
   );
@@ -52,11 +92,30 @@ const ProfileScreen = ({ history }) => {
 
 export default ProfileScreen;
 
-function Order({ order }) {
-  console.log(order);
-  //   address: "Zoonimar Babapora srinagar"
-  // amount: "500"
-  return (
+function Order({ order, order_id, filterByStatus }) {
+  // console.log(order);
+  const history = useHistory();
+
+  const handleUpdate = (order) => {
+    history.push(`/admin/createorder/edit/${order_id}`);
+  };
+
+  const handleDelete = (order) => {
+    // console.log(order);
+    if (window.confirm('Are You Sure ?')) {
+      db.collection('orders')
+        .doc(order_id)
+        .delete()
+        .then(function () {
+          alert('Order Deleted Successfully');
+        })
+        .catch(function (error) {
+          alert('Error: ', error.message);
+        });
+    }
+  };
+
+  return order.status === filterByStatus ? (
     <Card className='rounded my-3' text='white'>
       <Card.Header
         className='py-3 d-flex justify-content-between align-items-center'
@@ -117,41 +176,32 @@ function Order({ order }) {
         </Row>
       </Card.Body>
       <hr />
-      <Form
-      //   onSubmit={commentHandler}
+      {/* <Form
+        // onSubmit={commentHandler}
+      > */}
+      <Form.Group
+        controlId='comment'
+        className='d-flex justify-content-evenly align-items-center'
       >
-        <Form.Group
-          controlId='comment'
-          className='d-flex justify-content-around align-items-center'
+        <Button
+          type='submit'
+          variant='dark'
+          className=' rounded w-50 mx-2'
+          onClick={() => handleUpdate(order)}
         >
-          <Button
-            type='submit'
-            variant='dark'
-            className='ml-2 rounded'
-            // disabled={!commentInput}
-          >
-            Submit
-          </Button>
+          Update
+        </Button>
 
-          <Button
-            type='submit'
-            variant='dark'
-            className='ml-2 rounded'
-            // disabled={!commentInput}
-          >
-            Update
-          </Button>
-
-          <Button
-            type='submit'
-            variant='dark'
-            className='ml-2 rounded'
-            // disabled={!commentInput}
-          >
-            Delete
-          </Button>
-        </Form.Group>
-      </Form>
+        <Button
+          type='submit'
+          variant='dark'
+          className=' rounded w-50 mx-2'
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      </Form.Group>
+      {/* </Form> */}
     </Card>
-  );
+  ) : null;
 }

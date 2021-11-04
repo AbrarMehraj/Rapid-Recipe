@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import firebase from 'firebase';
 import { LinearProgress } from '@material-ui/core';
 import { db, storage } from '../components/firebase';
 
-const CreateOrderScreen = ({ history }) => {
-  return <OrderForm />;
+const CreateOrderScreen = (props) => {
+  return <OrderForm history={props.history} match={props.match} />;
 };
 
 export default CreateOrderScreen;
@@ -17,7 +17,7 @@ const initialState = {
   address: '',
   medicine: '',
   amount: '',
-  status: 'Pending',
+  status: 'PENDING',
 };
 
 function OrderForm(props) {
@@ -25,8 +25,9 @@ function OrderForm(props) {
   const [progress, setProgress] = useState(0);
   const [image, setImage] = useState(null);
   const [disabled, setDisabled] = useState(false);
-
   const userInfo = useSelector((state) => state.userInfo);
+
+  const id = props.match.params ? props.match.params.id : null;
 
   const imageChange = (e) => {
     if (e.target.files[0]) setImage(e.target.files[0]);
@@ -36,59 +37,80 @@ function OrderForm(props) {
     setValues({ ...values, [type]: val });
   };
 
-  console.log({ values });
+  useEffect(() => {
+    if (id) {
+      db.collection('orders')
+        .doc(id)
+        .onSnapshot((snapshot) => {
+          setValues(snapshot.data());
+        });
+    }
+  }, [id]);
+
+  console.log({ values, id });
 
   const handleUpload = (e) => {
     e.preventDefault();
     setDisabled(true);
-    const uploadTask = storage.ref(`orderImages/${image.name}`).put(image);
+    if (id) {
+      let data = JSON.parse(JSON.stringify(values));
+      db.collection('orders')
+        .doc(id)
+        .update(data)
+        .then(() => {
+          alert('Order Updated Successfully');
+          props.history.goBack();
+        });
+    } else {
+      const uploadTask = storage.ref(`orderImages/${image.name}`).put(image);
 
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        // progress function
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(progress);
-      },
-      (error) => {
-        // Error Function
-        console.log(error);
-        alert(error.message);
-      },
-      () => {
-        //  Complete function
-        storage
-          .ref('orderImages')
-          .child(image.name)
-          .getDownloadURL()
-          .then((url) => {
-            //    put image inside the db
-            db.collection('orders').add({
-              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-              name: values.name,
-              number: values.number,
-              address: values.address,
-              medicine: values.medicine,
-              amount: values.amount,
-              status: values.status,
-              imageUrl: url,
-              username: userInfo.displayName,
-              userId: userInfo.uid,
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          // progress function
+          const progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(progress);
+        },
+        (error) => {
+          // Error Function
+          console.log(error);
+          alert(error.message);
+        },
+        () => {
+          //  Complete function
+          storage
+            .ref('orderImages')
+            .child(image.name)
+            .getDownloadURL()
+            .then((url) => {
+              //    put image inside the db
+              db.collection('orders').add({
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                name: values.name,
+                number: values.number,
+                address: values.address,
+                medicine: values.medicine,
+                amount: values.amount,
+                status: values.status,
+                imageUrl: url,
+                username: userInfo.displayName,
+                userId: userInfo.uid,
+              });
+
+              setProgress(0);
+              setImage(null);
+              setValues(initialState);
+              setDisabled(false);
+            })
+            .then(() => {
+              // props.onHide();
+              alert('Order Created Successfully');
             });
-
-            setProgress(0);
-            setImage(null);
-            setValues(initialState);
-            setDisabled(false);
-          })
-          .then(() => {
-            // props.onHide();
-            alert('Order Created Successfully');
-          });
-      }
-    );
+        }
+      );
+    }
   };
 
   return (
@@ -132,11 +154,11 @@ function OrderForm(props) {
             value={values.status}
             onChange={(e) => handleInputChange(e.target.value, 'status')}
           >
-            <option>Pending</option>
-            <option>Confirm</option>
-            <option>Dispatch</option>
-            <option>Cancelled</option>
-            <option>Delivered</option>
+            <option>PENDING</option>
+            <option>CONFIRM</option>
+            <option>DISPATCH</option>
+            <option>CANCELLED</option>
+            <option>DELIVERED</option>
           </Form.Control>
         </Form.Group>
 
@@ -177,10 +199,20 @@ function OrderForm(props) {
           />
         </Form.Group>
 
-        <Form.Group>
-          <Form.File id='image' required onChange={imageChange} />
-        </Form.Group>
-
+        {id ? (
+          <Form.Group>
+            <Card.Img variant='top' src={values.imageUrl} className='px-1 ' />
+          </Form.Group>
+        ) : (
+          <Form.Group>
+            <Form.File
+              id='image'
+              // required={id && values.imageUrl ? false : true}
+              required
+              onChange={imageChange}
+            />
+          </Form.Group>
+        )}
         <Button
           type='submit'
           variant='dark'
@@ -188,7 +220,7 @@ function OrderForm(props) {
           style={{ width: '100%' }}
           disabled={disabled}
         >
-          Upload
+          {id ? 'Update' : 'Submit'}
         </Button>
       </Form>
     </div>

@@ -36,7 +36,7 @@ const Header = () => {
     };
   }, [dispatch]);
 
-  console.log(userInfo);
+  // console.log(userInfo);
 
   const logoutHandler = () => {
     auth.signOut();

@@ -64,7 +64,7 @@ function MyVerticallyCenteredModal(props) {
       },
       (error) => {
         // Error Function
-        console.log(error);
+        // console.log(error);
         alert(error.message);
       },
       () => {

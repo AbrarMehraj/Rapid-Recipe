@@ -153,7 +153,7 @@ const Post = ({ post, id, show, isAdmin }) => {
           url: url,
         })
         .then(() => {
-          console.log('Thanks for sharing!');
+          // console.log('Thanks for sharing!');
         })
         .catch(console.error);
     } else {
